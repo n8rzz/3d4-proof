@@ -67,367 +67,176 @@ $(document).ready(function() {
 
 //* --------------------------------------------------------------------
 //* --------------------------------------------------------------------
-    /**
-     * @class GameLogicController
-     * @constructor
-     */
-    var GameLogicController = (function() {
-        var GameLogicController = function() {
-
-            return this._init();
-        };
-
-        GameLogicController.prototype._init = function() {
-            this._gameBoard = [];
-
-            return this;
-        };
-
-
-        GameLogicController.prototype.isWinningMove = function(gameBoard) {
-            this._gameBoard = gameBoard;
-
-            if (this._isSimpleRowWin()) {
-                return true;
-
-            } else if (this._isSimpleColumnWin()) {
-                return true;
-
-            } else if (this._isSimpleDiagonalWin()) {
-                return true;
-
-            } else if (this._isComplexStackWin()) {
-                return true;
-
-            } else if (this._isComplexRowStaircaseWin()) {
-                return true;
-
-            } else if (this._isComplexColoumnStaircaseWin()) {
-                return true;
-
-            } else if (this._isComplexDiagonalWin()) {
-                return true;
-
-            }
-
-
-            this._gameBoard = [];
-
-            return false;
-        };
-
-
-        ////////////////////////////////////////////////////////////////
-        /// HELPERS
-        ////////////////////////////////////////////////////////////////
-
-        GameLogicController.prototype._isSimpleRowWin = function() {
-            var l;
-            var level;
-            var r;
-            var row;
-
-            for (l = 0; l < this._gameBoard.length; l++) {
-                level = this._gameBoard[l];
-
-                for (r = 0; r < level.length; r++) {
-                    row = level[r];
-
-                    if (row[0] === null ||
-                        row[1] === null ||
-                        row[2] === null ||
-                        row[3] === null) {
-                        continue;
-                    } else if (row[0] !== row[1] ||
-                        row[1] !== row[2] ||
-                        row[2] !== row[3]) {
-                        continue;
-                    }
-
-                    if (row[0] === row[1] &&
-                        row[1] === row[2] &&
-                        row[2] === row[3]) {
-                        console.log(r, row);
-
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        };
-
-        GameLogicController.prototype._isSimpleColumnWin = function() {
-            var l;
-            var level;
-            var c;
-            var column;
-
-            for (l = 0; l < this._gameBoard.length; l++) {
-                level = this._gameBoard[l];
-
-                for (c = 0; c < level.length; c++) {
-                    if (level[0][c] === null ||
-                        level[1][c] === null ||
-                        level[2][c] === null ||
-                        level[3][c] === null) {
-                        continue;
-                    } else if (level[0][c] !== level[1][c] ||
-                        level[1][c] !== level[2][c] ||
-                        level[2][c] !== level[3][c]) {
-                        continue;
-                    }
-
-                    if (level[0][c] === level[1][c] && level[1][c] === level[2][c] && level[2][c] === level[3][c]) {
-                        console.log(c, [level[0][c], level[1][c], level[2][c], level[3][c]]);
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        };
-
-        GameLogicController.prototype._isSimpleDiagonalWin = function() {
-            var l;
-            var level;
-
-            for (l = 0; l < this._gameBoard.length; l++) {
-                level = this._gameBoard[l];
-
-                if (level[0][3] !== null &&
-                    level[1][2] !== null &&
-                    level[2][1] !== null &&
-                    level[3][0] !== null) {
-
-                    if (level[0][3] === level[1][2] &&
-                        level[1][2] === level[2][1] &&
-                        level[2][1] === level[3][0]) {
-                        console.log(level);
-                        return true;
-                    }
-                } else if (level[0][0] !== null &&
-                    level[1][1] !== null &&
-                    level[2][2] !== null &&
-                    level[3][3] !== null) {
-
-                    if (level[0][0] === level[1][1] &&
-                        level[1][1] === level[2][2] &&
-                        level[2][2] === level[3][3]) {
-                        console.log(level);
-                        return true;
-                    }
-                }
-
-            }
-
-            return false;
-        };
-
-        GameLogicController.prototype._isComplexStackWin = function() {
-            var l;
-            var r;
-            var c;
-
-            for (r = 0; r < this._gameBoard[0].length; r++) {
-                for (c = 0; c < this._gameBoard[0][r].length; c++) {
-                    if (this._gameBoard[0][r][c] !== null &&
-                        this._gameBoard[1][r][c] !== null &&
-                        this._gameBoard[2][r][c] !== null &&
-                        this._gameBoard[3][r][c] !== null) {
-
-                        if (this._gameBoard[0][r][c] === this._gameBoard[1][r][c] &&
-                            this._gameBoard[1][r][c] === this._gameBoard[2][r][c] &&
-                            this._gameBoard[2][r][c] === this._gameBoard[3][r][c]) {
-                                return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        };
-
-
-        GameLogicController.prototype._isComplexRowStaircaseWin = function() {
-            var r;
-
-            for (r = 0; r < this._gameBoard[0].length; r++) {
-                if (this._gameBoard[0][r][0] !== null &&
-                    this._gameBoard[1][r][1] !== null &&
-                    this._gameBoard[2][r][2] !== null &&
-                    this._gameBoard[3][r][3] !== null) {
-
-                    if (this._gameBoard[0][r][0] === this._gameBoard[1][r][1] &&
-                        this._gameBoard[1][r][1] === this._gameBoard[2][r][2] &&
-                        this._gameBoard[2][r][2] === this._gameBoard[3][r][3]) {
-
-                        return true;
-                    }
-                } else if (this._gameBoard[3][r][0] !== null &&
-                    this._gameBoard[2][r][1] !== null &&
-                    this._gameBoard[1][r][2] !== null &&
-                    this._gameBoard[0][r][3] !== null) {
-
-                    if (this._gameBoard[3][r][0] === this._gameBoard[2][r][1] &&
-                        this._gameBoard[2][r][1] === this._gameBoard[1][r][2] &&
-                        this._gameBoard[1][r][2] === this._gameBoard[0][r][3]) {
-
-                        return true;
-                    }
-                }
-            }
-
-
-            return false;
-        };
-
-        GameLogicController.prototype._isComplexColoumnStaircaseWin = function() {
-            var c;
-            var gameBoard = this._gameBoard;
-
-            for (c = 0; c < gameBoard[0].length; c++) {
-                if (gameBoard[0][0][c] !== null &&
-                    gameBoard[1][1][c] !== null &&
-                    gameBoard[2][2][c] !== null &&
-                    gameBoard[3][3][c] !== null) {
-
-                    if (gameBoard[0][0][c] === gameBoard[1][1][c] &&
-                        gameBoard[1][1][c] === gameBoard[2][2][c] &&
-                        gameBoard[2][2][c] === gameBoard[3][3][c]) {
-
-                        return true;
-                    }
-                } else if (gameBoard[3][0][c] !== null &&
-                    gameBoard[2][1][c] !== null &&
-                    gameBoard[1][2][c] !== null &&
-                    gameBoard[0][3][c] !== null) {
-
-                    if (gameBoard[3][0][c] === gameBoard[2][1][c] &&
-                        gameBoard[2][1][c] === gameBoard[1][2][c] &&
-                        gameBoard[1][2][c] === gameBoard[0][3][c]) {
-
-                        return true;
-                    }
-                }
-            }
-
-
-            return false;
-        };
-
-        GameLogicController.prototype._isComplexDiagonalWin = function() {
-            var gameBoard = this._gameBoard;
-
-            if (gameBoard[0][0][0] !== null &&
-                gameBoard[1][1][1] !== null &&
-                gameBoard[2][2][2] !== null &&
-                gameBoard[3][3][3] !== null) {
-
-                if (gameBoard[0][0][0] === gameBoard[0][0][0] &&
-                    gameBoard[1][1][1] === gameBoard[2][2][2] &&
-                    gameBoard[2][2][2] === gameBoard[3][3][3]) {
-
-                    return true;
-                }
-            }
-
-            if (gameBoard[3][3][0] !== null &&
-                gameBoard[2][2][1] !== null &&
-                gameBoard[1][1][2] !== null &&
-                gameBoard[0][0][3] !== null) {
-
-                if (gameBoard[3][3][0] === gameBoard[2][2][1] &&
-                    gameBoard[2][2][1] === gameBoard[1][1][2] &&
-                    gameBoard[1][1][2] === gameBoard[0][0][3]) {
-
-                    return true;
-                }
-            }
-
-            if (gameBoard[3][0][0] !== null &&
-                gameBoard[2][2][1] !== null &&
-                gameBoard[1][1][2] !== null &&
-                gameBoard[0][0][3] !== null) {
-
-                if (gameBoard[3][0][0] === gameBoard[2][2][1] &&
-                    gameBoard[2][2][1] === gameBoard[1][1][2] &&
-                    gameBoard[1][1][2] === gameBoard[0][0][3]) {
-
-                    return true;
-                }
-            }
-
-            if (gameBoard[3][0][3] !== null &&
-                gameBoard[2][1][2] !== null &&
-                gameBoard[1][2][1] !== null &&
-                gameBoard[0][3][0] !== null) {
-
-                if (gameBoard[3][0][3] === gameBoard[2][1][2] &&
-                    gameBoard[2][1][2] === gameBoard[1][2][1] &&
-                    gameBoard[1][2][1] === gameBoard[0][3][0]) {
-
-                    return true;
-                }
-            }
-
-            return false;
-        };
-
-
-        return GameLogicController;
-    })();
-
-//* --------------------------------------------------------------------
-//* --------------------------------------------------------------------
 
     /**
      * @class GameLogicVectorController
      * @constructor
      */
     var GameLogicVectorController = (function() {
-        var VECTOR_FROM_POSITION = [
-            //up, left
+        /**
+         * Each value represents the distance away from an original point.  Each value has an
+         * inverse distance located in the VECTOR_INVERSE located at the same index
+         *
+         * EG: If VECTOR_FROM_POINT[8] travels to the left on a 2D plane, VECTOR_INVERSE[8] is
+         *  for a vector traveling to the right on a 2D plane
+         *
+         * TODO: there is probably a mathmatical way to do some of this other than listing
+         *  each direction and needing to use two seperate matching arrays
+         *
+         * @property VECTOR_FROM_POINT
+         * @type {array|array}
+         * @requires VECTOR_INVERSE
+         * @final
+         * @static
+         */
+        var VECTOR_FROM_POINT = [
+            //top left
             [0, -1, -1],
-            //up
+            //top
             [0, -1, 0],
-            //up, right
+            //top right
             [0, -1, 1],
             //right
             [0, 0, 1],
-            //down, right
+            //bottom right
             [0, 1, 1],
-            //down
+            //bottom
             [0, 1, 0],
-            //down, left
-            [0, 1, -1],
-            //left
-            [0, 0, -1]
-        ];
-
-        var VECTOR_INVERSE = [
-            //down, right
-            [0, 1, 1],
-            //down
-            [0, 1, 0],
-            //down, left
+            //bottom left
             [0, 1, -1],
             //left
             [0, 0, -1],
-            //up, left
+
+
+            //ascending
+            [1, 0, 0],
+            //descending
+            [-1, 0, 0],
+
+
+            //descending top left
+            [-1, -1, -1],
+            //descending top
+            [-1, -1, 0],
+            //descending top, right
+            [-1, -1, 1],
+            //descending right
+            [-1, 0, 1],
+
+            //descending bottom, right
+            [-1, 1, 1],
+            //descending bottom
+            [-1, 1, 0],
+            //descending bottom, left
+            [-1, 1, -1],
+            //descending left
+            [-1, 0, -1],
+
+
+            //ascending top left
+            [1, -1, -1],
+            //ascending top
+            [1, -1, 0],
+            //ascending top, right
+            [1, -1, 1],
+            //ascending right
+
+            [1, 0, 1],
+            //ascending bottom, right
+            [1, 1, 1],
+            //ascending bottom
+            [1, 1, 0],
+            //ascending bottom, left
+            [1, 1, -1],
+            //ascending left
+            [1, 0, -1],
+        ];
+
+        /**
+         * Each value represents the distance away from an original point.  Each value has an
+         * inverse distance located in the VECTOR_FROM_POINT located at the same index
+         *
+         * EG: If VECTOR_FROM_POINT[8] travels to the left on a 2D plane, VECTOR_INVERSE[8] is
+         *  for a vector traveling to the right on a 2D plane
+         *
+         * TODO: there is probably a mathmatical way to do some of this other than listing
+         *  each direction and needing to use two seperate matching arrays
+         *
+         * @property VECTOR_INVERSE
+         * @type {array|array}
+         * @requires VECTOR_FROM_POINT
+         * @final
+         * @static
+         */
+        var VECTOR_INVERSE = [
+            //bottom, right
+            [0, 1, 1],
+            //bottom
+            [0, 1, 0],
+            //bottom, left
+            [0, 1, -1],
+            //left
+            [0, 0, -1],
+            //top, left
             [0, -1, -1],
-            //up
+            //top
             [0, -1, 0],
-            //up, right
+            //top, right
             [0, -1, 1],
             //right
-            [0, 0, 1]
+            [0, 0, 1],
+
+            //descending
+            [-1, 0, 0],
+            //ascending
+            [1, 0, 0],
+
+            //ascending bottom, right
+            [1, 1, 1],
+            //ascending bottom
+            [1, 1, 0],
+            //ascending bottom, left
+            [1, 1, -1],
+            //ascending left
+            [1, 0, -1],
+
+            //ascending top left
+            [1, -1, -1],
+            //ascending top
+            [1, -1, 0],
+            //ascending top, right
+            [1, -1, 1],
+            //ascending right
+            [1, 0, 1],
+
+
+            //descending bottom, right
+            [-1, 1, 1],
+            //descending bottom
+            [-1, 1, 0],
+            //descending bottom, left
+            [-1, 1, -1],
+            //descending left
+            [-1, 0, -1],
+
+            //descending top left
+            [-1, -1, -1],
+            //descending top
+            [-1, -1, 0],
+            //descending top, right
+            [-1, -1, 1],
+            //descending right
+            [-1, 0, 1],
         ];
 
         var GameLogicVectorController = function() {
             return this._init();
         };
 
+        /**
+         * @method _init
+         * @for GameLogicVectorController
+         */
         GameLogicVectorController.prototype._init = function() {
             this._gameBoard = [];
             this._player = -1;
@@ -436,12 +245,19 @@ $(document).ready(function() {
             this._lastMove = null;
             this._initialPoint = null;
             this._comparePoint = null;
-            this._willCheckInverse = false;
+            this._willCheckInverse = true;
             this._moveCounter = 0;
 
             return this;
         };
 
+        /**
+         * Public facing method that starts off the Vector checks
+         *
+         * @method isWinningMove
+         * @for GameLogicVectorController
+         * @returns {boolean}
+         */
         GameLogicVectorController.prototype.isWinningMove = function(gameBoard, lastMove, activePlayer) {
             this._gameBoard = gameBoard;
             this._maxPosition = this._gameBoard.length - 1;
@@ -451,15 +267,22 @@ $(document).ready(function() {
             return this._isWinningMove();
         };
 
-
-
+        /**
+         * Loops through each available direction in the VECTORS_FROM_POINT array trying to match
+         * a point that contains the same player.  If a match is found, a new check is performed at
+         * the matching point and continues in the same direction
+         *
+         * @method _isWinningMethod
+         * @for GameLogicVectorController
+         * @returns {boolean}
+         */
         GameLogicVectorController.prototype._isWinningMove = function() {
             var i;
 
-            for (i = 0; i < VECTOR_FROM_POSITION.length; i++) {
+            for (i = 0; i < VECTOR_FROM_POINT.length; i++) {
                 this._moveCounter = 0;
-                this._willCheckInverse = false;
-                this._getVectorPointFromPosition(i, this._lastMove.slice(0), false);
+                this._willCheckInverse = true;
+                this._getNextPointAlongVector(i, this._lastMove.slice(0), false);
 
                 if (!this._isPointValid()) {
                     continue;
@@ -470,7 +293,6 @@ $(document).ready(function() {
 
                 // TODO: this is ugly and could probably be done a better way
                 while (playerAtPosition === this._player) {
-                    
                     this._moveCounter++;
                     playerAtPosition = -1;
 
@@ -479,15 +301,15 @@ $(document).ready(function() {
                         return true;
                     }
 
-                    // console.log(i, 'm', this._moveCounter, 'from', this._lastMove, 'continue to', this._comparePoint);
 
-                    this._getVectorPointFromPosition(i, this._comparePoint, false);
+                    this._getNextPointAlongVector(i, this._comparePoint, false);
 
-                    if (!this._isPointValid() && !this._willCheckInverse) {
-                        this._getVectorInverse(i, this._lastMove);
-                    }
 
                     if (!this._isPointValid() && this._willCheckInverse) {
+                        this._getInverseVector(i, this._lastMove);
+                    }
+
+                    if (!this._isPointValid() && !this._willCheckInverse) {
                         break;
                     }
 
@@ -500,15 +322,23 @@ $(document).ready(function() {
             return false;
         };
 
-
-        GameLogicVectorController.prototype._getVectorPointFromPosition = function(i, point, isInverse) {
+        /**
+         * Finds coordinates for a neighboring point along a vector given a starting point
+         *
+         * @method _getNextPointAlongVector
+         * @for GameLogicVectorController
+         * @param i {number} index incrementer
+         * @param point {array|number}
+         * @param isInverse {boolean}
+         */
+        GameLogicVectorController.prototype._getNextPointAlongVector = function(i, point, isInverse) {
             this._comparePoint = [];
             var VECTOR;
 
             if (isInverse) {
                 VECTOR = VECTOR_INVERSE;
             } else {
-                VECTOR = VECTOR_FROM_POSITION;
+                VECTOR = VECTOR_FROM_POINT;
             }
 
             this._comparePoint = [
@@ -518,14 +348,26 @@ $(document).ready(function() {
             ];
         };
 
-        GameLogicVectorController.prototype._getVectorInverse = function(i, point) {
-            // console.log('inverse', VECTOR_INVERSE[i]);
-
-            this._getVectorPointFromPosition(i, point, true);
-            this._willCheckInverse = true;
+        /**
+         *
+         *
+         * @method _getInverseVector
+         * @for GameLogicVectorController
+         * @param i {number} incrementor
+         * @param point {array|number}
+         */
+        GameLogicVectorController.prototype._getInverseVector = function(i, point) {
+            this._getNextPointAlongVector(i, point, true);
+            this._willCheckInverse = false;
         };
 
-
+        /**
+         * Checks if _comparePoint is out of bounds and returns false if it is
+         *
+         * @method _isPointValid
+         * @for GameLogicVectorController
+         * @return {boolean}
+         */
         GameLogicVectorController.prototype._isPointValid = function() {
             var i;
 
@@ -538,6 +380,13 @@ $(document).ready(function() {
             return true;
         };
 
+        /**
+         * Returns a player number given an array on the game board [level, row, cell]
+         *
+         * @method _getPlayerAtPoint
+         * @for GameLogicVectorController
+         * @requires {number} player number
+         */
         GameLogicVectorController.prototype._getPlayerAtPoint = function(point) {
             var level = point[0];
             var row = point[1];
@@ -591,15 +440,14 @@ $(document).ready(function() {
          * @param $element
          * @constructor
          */
-        var GameController = function($element, view, gameLogicController, gameLogicVectorController) {
-            return this._init($element, view, gameLogicController, gameLogicVectorController);
+        var GameController = function($element, view, gameLogicVectorController) {
+            return this._init($element, view, gameLogicVectorController);
         };
 
-        GameController.prototype._init = function($element, view, gameLogicController, gameLogicVectorController) {
+        GameController.prototype._init = function($element, view, gameLogicVectorController) {
 
             this._$element = $element;
             this.gameView = view;
-            this.gameLogicController = gameLogicController;
             this.gameLogicVectorController = gameLogicVectorController;
 
             this._$row = null;
@@ -644,7 +492,6 @@ $(document).ready(function() {
         GameController.prototype._destroy = function() {
             this._$element = null;
             this.gameView = null;
-            this.gameLogicController = null;
             this.gameLogicVectorController = null;
             this._$row = null;
             this._$cell = null;
@@ -686,7 +533,6 @@ $(document).ready(function() {
             madeMove[1] = this._moveToMake.row;
             madeMove[2] = this._moveToMake.column;
 
-            // var isWinner = this.gameLogicController.isWinningMove(GAME_BOARD);
             var isWinner = this.gameLogicVectorController.isWinningMove(GAME_BOARD, madeMove, this._activePlayer);
             if (isWinner) {
                 alert('Player ' + (this._activePlayer + 1) + ' is a WINNER!!!');
@@ -753,9 +599,7 @@ $(document).ready(function() {
     var $currentPlayer = $('.js-player');
 
     var gameView = new GameView($currentPlayer);
-    var gameLogicController = new GameLogicController();
     var gameLogicVectorController = new GameLogicVectorController();
-
-    var gameController = new GameController($gameBoard, gameView, gameLogicController, gameLogicVectorController);
+    var gameController = new GameController($gameBoard, gameView, gameLogicVectorController);
 
 });
