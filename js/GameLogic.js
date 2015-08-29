@@ -382,6 +382,182 @@ $(document).ready(function() {
 //* --------------------------------------------------------------------
 
     /**
+     * @class GameLogicVectorController
+     * @constructor
+     */
+    var GameLogicVectorController = (function() {
+        var VECTOR_FROM_POSITION = [
+            //up, left
+            [0, -1, -1],
+            //up
+            [0, -1, 0],
+            //up, right
+            [0, -1, 1],
+            //right
+            [0, 0, 1],
+            //down, right
+            [0, 1, 1],
+            //down
+            [0, 1, 0],
+            //down, left
+            [0, 1, -1],
+            //left
+            [0, 0, -1]
+        ];
+
+        var VECTOR_INVERSE = [
+            //down, right
+            [0, 1, 1],
+            //down
+            [0, 1, 0],
+            //down, left
+            [0, 1, -1],
+            //left
+            [0, 0, -1],
+            //up, left
+            [0, -1, -1],
+            //up
+            [0, -1, 0],
+            //up, right
+            [0, -1, 1],
+            //right
+            [0, 0, 1]
+        ];
+
+        var GameLogicVectorController = function() {
+            return this._init();
+        };
+
+        GameLogicVectorController.prototype._init = function() {
+            this._gameBoard = [];
+            this._player = -1;
+            this._maxPosition = -1;
+
+            this._lastMove = null;
+            this._initialPoint = null;
+            this._comparePoint = null;
+            this._willCheckInverse = false;
+            this._moveCounter = 0;
+
+            return this;
+        };
+
+        GameLogicVectorController.prototype.isWinningMove = function(gameBoard, lastMove, activePlayer) {
+            this._gameBoard = gameBoard;
+            this._maxPosition = this._gameBoard.length -1;
+            this._player = activePlayer;
+            this._lastMove = lastMove;
+
+            return this._isWinningMove();
+        };
+
+
+
+        GameLogicVectorController.prototype._isWinningMove = function() {
+            var i;
+            var direction;
+
+            for (i = 0; i < VECTOR_FROM_POSITION.length; i++) {
+                direction = i;
+                this._moveCounter = 0;
+                this._willCheckInverse = false;
+                this._getVectorPointFromPosition(i, this._lastMove.slice(0));
+
+                if (!this._isPointValid()) {
+                    continue;
+                }
+
+                var playerAtPosition = this._getPlayerAtPoint(this._comparePoint);
+
+
+                while (playerAtPosition === this._player) {
+                    // if there is a match then we have two valid moves next to each other
+                    this._moveCounter++;
+                    if (this._moveCounter === this._maxPosition) {
+                        console.log('score 4');
+                        return true;
+                    }
+
+                    playerAtPosition = -1;
+                    console.log(i, 'm', this._moveCounter, 'from', this._lastMove, 'continue to', this._comparePoint);
+
+                    this._getVectorPointFromPosition(i, this._comparePoint);
+
+                    if (!this._isPointValid() && !this._willCheckInverse) {
+                        this._getVectorInverse(i, this._lastMove);
+                    }
+
+                    if (!this._isPointValid() && this._willCheckInverse) {
+                        break;
+                    }
+
+
+                    playerAtPosition = this._getPlayerAtPoint(this._comparePoint);
+                }
+
+                console.log('connections', this._moveCounter);
+            }
+
+
+            return false;
+        };
+
+
+        GameLogicVectorController.prototype._getVectorPointFromPosition = function(i, point, isInverse) {
+            var VECTOR;
+            this._comparePoint = [];
+
+            if (isInverse) {
+                VECTOR = VECTOR_INVERSE;
+            } else {
+                VECTOR = VECTOR_FROM_POSITION;
+            }
+
+
+            this._comparePoint = [
+                (point[0] + VECTOR[i][0]),
+                (point[1] + VECTOR[i][1]),
+                (point[2] + VECTOR[i][2])
+            ];
+        };
+
+        GameLogicVectorController.prototype._getVectorInverse = function(i, point) {
+            console.log('inverse', VECTOR_INVERSE[i]);
+
+            this._getVectorPointFromPosition(i, point, true);
+            this._willCheckInverse = true;
+        };
+
+
+        GameLogicVectorController.prototype._isPointValid = function() {
+            var i;
+
+            for (i = 0; i < this._comparePoint.length; i++) {
+                if (this._comparePoint[i] < 0 || this._comparePoint[i] > this._maxPosition) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        GameLogicVectorController.prototype._getPlayerAtPoint = function(point) {
+            var level = point[0];
+            var row = point[1];
+            var cell = point[2];
+
+            return this._gameBoard[level][row][cell];
+        };
+
+
+
+        return GameLogicVectorController;
+    })();
+
+//* --------------------------------------------------------------------
+//* --------------------------------------------------------------------
+
+    /**
      * GameController
      * @constructor
      */
@@ -418,15 +594,16 @@ $(document).ready(function() {
          * @param $element
          * @constructor
          */
-        var GameController = function($element, view, gameLogicController) {
-            return this._init($element, view, gameLogicController);
+        var GameController = function($element, view, gameLogicController, gameLogicVectorController) {
+            return this._init($element, view, gameLogicController, gameLogicVectorController);
         };
 
-        GameController.prototype._init = function($element, view, gameLogicController) {
+        GameController.prototype._init = function($element, view, gameLogicController, gameLogicVectorController) {
 
             this._$element = $element;
             this.gameView = view;
             this.gameLogicController = gameLogicController;
+            this.gameLogicVectorController = gameLogicVectorController;
 
             this._$row = null;
             this._$cell = null;
@@ -471,6 +648,7 @@ $(document).ready(function() {
             this._$element = null;
             this.gameView = null;
             this.gameLogicController = null;
+            this.gameLogicVectorController = null;
             this._$row = null;
             this._$cell = null;
 
@@ -506,8 +684,13 @@ $(document).ready(function() {
 
         GameController.prototype._didMakeMove = function($target) {
             this.gameView.makePlayerMove(this._activePlayer, $target);
+            var madeMove = [];
+            madeMove[0] = this._moveToMake.level;
+            madeMove[1] = this._moveToMake.row;
+            madeMove[2] = this._moveToMake.column;
 
-            var isWinner = this.gameLogicController.isWinningMove(GAME_BOARD);
+            // var isWinner = this.gameLogicController.isWinningMove(GAME_BOARD);
+            var isWinner = this.gameLogicVectorController.isWinningMove(GAME_BOARD, madeMove, this._activePlayer);
             if (isWinner) {
                 alert('Player ' + (this._activePlayer + 1) + ' is a WINNER!!!');
 
@@ -574,6 +757,8 @@ $(document).ready(function() {
 
     var gameView = new GameView($currentPlayer);
     var gameLogicController = new GameLogicController();
-    var gameController = new GameController($gameBoard, gameView, gameLogicController);
+    var gameLogicVectorController = new GameLogicVectorController();
+
+    var gameController = new GameController($gameBoard, gameView, gameLogicController, gameLogicVectorController);
 
 });
