@@ -459,7 +459,7 @@ $(document).ready(function() {
             for (i = 0; i < VECTOR_FROM_POSITION.length; i++) {
                 this._moveCounter = 0;
                 this._willCheckInverse = false;
-                this._getVectorPointFromPosition(i, this._lastMove.slice(0));
+                this._getVectorPointFromPosition(i, this._lastMove.slice(0), false);
 
                 if (!this._isPointValid()) {
                     continue;
@@ -470,7 +470,7 @@ $(document).ready(function() {
 
                 // TODO: this is ugly and could probably be done a better way
                 while (playerAtPosition === this._player) {
-                    // if there is a match then we have two valid moves next to each other
+                    
                     this._moveCounter++;
                     playerAtPosition = -1;
 
@@ -481,7 +481,7 @@ $(document).ready(function() {
 
                     // console.log(i, 'm', this._moveCounter, 'from', this._lastMove, 'continue to', this._comparePoint);
 
-                    this._getVectorPointFromPosition(i, this._comparePoint);
+                    this._getVectorPointFromPosition(i, this._comparePoint, false);
 
                     if (!this._isPointValid() && !this._willCheckInverse) {
                         this._getVectorInverse(i, this._lastMove);
