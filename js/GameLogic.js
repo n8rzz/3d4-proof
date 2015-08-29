@@ -444,7 +444,7 @@ $(document).ready(function() {
 
         GameLogicVectorController.prototype.isWinningMove = function(gameBoard, lastMove, activePlayer) {
             this._gameBoard = gameBoard;
-            this._maxPosition = this._gameBoard.length -1;
+            this._maxPosition = this._gameBoard.length - 1;
             this._player = activePlayer;
             this._lastMove = lastMove;
 
@@ -455,10 +455,8 @@ $(document).ready(function() {
 
         GameLogicVectorController.prototype._isWinningMove = function() {
             var i;
-            var direction;
 
             for (i = 0; i < VECTOR_FROM_POSITION.length; i++) {
-                direction = i;
                 this._moveCounter = 0;
                 this._willCheckInverse = false;
                 this._getVectorPointFromPosition(i, this._lastMove.slice(0));
@@ -470,16 +468,18 @@ $(document).ready(function() {
                 var playerAtPosition = this._getPlayerAtPoint(this._comparePoint);
 
 
+                // TODO: this is ugly and could probably be done a better way
                 while (playerAtPosition === this._player) {
                     // if there is a match then we have two valid moves next to each other
                     this._moveCounter++;
+                    playerAtPosition = -1;
+
                     if (this._moveCounter === this._maxPosition) {
                         console.log('score 4');
                         return true;
                     }
 
-                    playerAtPosition = -1;
-                    console.log(i, 'm', this._moveCounter, 'from', this._lastMove, 'continue to', this._comparePoint);
+                    // console.log(i, 'm', this._moveCounter, 'from', this._lastMove, 'continue to', this._comparePoint);
 
                     this._getVectorPointFromPosition(i, this._comparePoint);
 
@@ -494,8 +494,6 @@ $(document).ready(function() {
 
                     playerAtPosition = this._getPlayerAtPoint(this._comparePoint);
                 }
-
-                console.log('connections', this._moveCounter);
             }
 
 
@@ -504,15 +502,14 @@ $(document).ready(function() {
 
 
         GameLogicVectorController.prototype._getVectorPointFromPosition = function(i, point, isInverse) {
-            var VECTOR;
             this._comparePoint = [];
+            var VECTOR;
 
             if (isInverse) {
                 VECTOR = VECTOR_INVERSE;
             } else {
                 VECTOR = VECTOR_FROM_POSITION;
             }
-
 
             this._comparePoint = [
                 (point[0] + VECTOR[i][0]),
@@ -522,7 +519,7 @@ $(document).ready(function() {
         };
 
         GameLogicVectorController.prototype._getVectorInverse = function(i, point) {
-            console.log('inverse', VECTOR_INVERSE[i]);
+            // console.log('inverse', VECTOR_INVERSE[i]);
 
             this._getVectorPointFromPosition(i, point, true);
             this._willCheckInverse = true;
