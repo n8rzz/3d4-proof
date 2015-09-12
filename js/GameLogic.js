@@ -74,8 +74,8 @@ $(document).ready(function() {
      */
     var GameLogicVectorController = (function() {
         /**
-         * Each value represents the distance away from an original point.  Each value has an
-         * inverse distance located in the VECTOR_INVERSE located at the same index
+         * Each value represents a direction from a point.  Each value has an
+         * inverse direction located in the VECTOR_INVERSE located at the same index
          *
          * EG: If VECTOR_FROM_POINT[8] travels to the left on a 2D plane, VECTOR_INVERSE[8] is
          *  for a vector traveling to the right on a 2D plane
@@ -153,8 +153,8 @@ $(document).ready(function() {
         ];
 
         /**
-         * Each value represents the distance away from an original point.  Each value has an
-         * inverse distance located in the VECTOR_FROM_POINT located at the same index
+         * Each value represents a direction from a point.  Each value has an
+         * inverse direction located in the VECTOR_INVERSE located at the same index
          *
          * EG: If VECTOR_FROM_POINT[8] travels to the left on a 2D plane, VECTOR_INVERSE[8] is
          *  for a vector traveling to the right on a 2D plane
