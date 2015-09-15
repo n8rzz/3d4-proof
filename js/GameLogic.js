@@ -74,11 +74,8 @@ $(document).ready(function() {
      */
     var GameLogicVectorController = (function() {
         /**
-         * Each value represents a direction from a point.  Each value has an
-         * inverse direction located in the VECTOR_INVERSE located at the same index
-         *
-         * EG: If VECTOR_FROM_POINT[8] travels to the left on a 2D plane, VECTOR_INVERSE[8] is
-         *  for a vector traveling to the right on a 2D plane
+         * Each value represents a direction away from a point located in 3d space.  The values
+         *  are arbitrary, signaling only a positive or negative direction of travel.
          *
          * TODO: there is probably a mathmatical way to do some of this other than listing
          *  each direction and needing to use two seperate matching arrays
@@ -152,83 +149,6 @@ $(document).ready(function() {
             [1, 0, -1],
         ];
 
-        /**
-         * Each value represents a direction from a point.  Each value has an
-         * inverse direction located in the VECTOR_INVERSE located at the same index
-         *
-         * EG: If VECTOR_FROM_POINT[8] travels to the left on a 2D plane, VECTOR_INVERSE[8] is
-         *  for a vector traveling to the right on a 2D plane
-         *
-         * TODO: there is probably a mathmatical way to do some of this other than listing
-         *  each direction and needing to use two seperate matching arrays
-         *
-         * @property VECTOR_INVERSE
-         * @type {array|array}
-         * @requires VECTOR_FROM_POINT
-         * @final
-         * @static
-         */
-        var VECTOR_INVERSE = [
-            //bottom, right
-            [0, 1, 1],
-            //bottom
-            [0, 1, 0],
-            //bottom, left
-            [0, 1, -1],
-            //left
-            [0, 0, -1],
-            //top, left
-            [0, -1, -1],
-            //top
-            [0, -1, 0],
-            //top, right
-            [0, -1, 1],
-            //right
-            [0, 0, 1],
-
-            //descending
-            [-1, 0, 0],
-            //ascending
-            [1, 0, 0],
-
-            //ascending bottom, right
-            [1, 1, 1],
-            //ascending bottom
-            [1, 1, 0],
-            //ascending bottom, left
-            [1, 1, -1],
-            //ascending left
-            [1, 0, -1],
-
-            //ascending top left
-            [1, -1, -1],
-            //ascending top
-            [1, -1, 0],
-            //ascending top, right
-            [1, -1, 1],
-            //ascending right
-            [1, 0, 1],
-
-
-            //descending bottom, right
-            [-1, 1, 1],
-            //descending bottom
-            [-1, 1, 0],
-            //descending bottom, left
-            [-1, 1, -1],
-            //descending left
-            [-1, 0, -1],
-
-            //descending top left
-            [-1, -1, -1],
-            //descending top
-            [-1, -1, 0],
-            //descending top, right
-            [-1, -1, 1],
-            //descending right
-            [-1, 0, 1],
-        ];
-
         var GameLogicVectorController = function() {
             return this._init();
         };
@@ -278,11 +198,14 @@ $(document).ready(function() {
          */
         GameLogicVectorController.prototype._isWinningMove = function() {
             var i;
+            var vector;
 
             for (i = 0; i < VECTOR_FROM_POINT.length; i++) {
+                vector = VECTOR_FROM_POINT[i];
+
                 this._moveCounter = 0;
                 this._willCheckInverse = true;
-                this._getNextPointAlongVector(i, this._lastMove.slice(0), false);
+                this._getNextPointAlongVector(vector, this._lastMove.slice(0), false);
 
                 if (!this._isPointValid()) {
                     continue;
@@ -292,6 +215,8 @@ $(document).ready(function() {
 
 
                 // TODO: this is ugly and could probably be done a better way
+                // TODO: recursion may be the way to go here, functional programming
+                //  but be mindful of portability to C#
                 while (playerAtPosition === this._player) {
                     this._moveCounter++;
                     playerAtPosition = -1;
@@ -302,11 +227,11 @@ $(document).ready(function() {
                     }
 
 
-                    this._getNextPointAlongVector(i, this._comparePoint, false);
+                    this._getNextPointAlongVector(vector, this._comparePoint, false);
 
 
                     if (!this._isPointValid() && this._willCheckInverse) {
-                        this._getInverseVector(i, this._lastMove);
+                        this._getInverseVector(vector, this._lastMove);
                     }
 
                     if (!this._isPointValid() && !this._willCheckInverse) {
@@ -327,38 +252,37 @@ $(document).ready(function() {
          *
          * @method _getNextPointAlongVector
          * @for GameLogicVectorController
-         * @param i {number} index incrementer
+         * @param vector {array|number} mathmatical direction to a next point from point
          * @param point {array|number}
-         * @param isInverse {boolean}
          */
-        GameLogicVectorController.prototype._getNextPointAlongVector = function(i, point, isInverse) {
+        GameLogicVectorController.prototype._getNextPointAlongVector = function(vector, point) {
             this._comparePoint = [];
-            var VECTOR;
-
-            if (isInverse) {
-                VECTOR = VECTOR_INVERSE;
-            } else {
-                VECTOR = VECTOR_FROM_POINT;
-            }
 
             this._comparePoint = [
-                (point[0] + VECTOR[i][0]),
-                (point[1] + VECTOR[i][1]),
-                (point[2] + VECTOR[i][2])
+                (point[0] + vector[0]),
+                (point[1] + vector[1]),
+                (point[2] + vector[2])
             ];
         };
 
         /**
-         *
+         * Calculates an opposite vector given the current vector direction.
          *
          * @method _getInverseVector
          * @for GameLogicVectorController
-         * @param i {number} incrementor
+         * @param vector {array} direction away from point
          * @param point {array|number}
          */
-        GameLogicVectorController.prototype._getInverseVector = function(i, point) {
-            this._getNextPointAlongVector(i, point, true);
+        GameLogicVectorController.prototype._getInverseVector = function(vector, point) {
+            var j;
+            var oppositeVector = [];
+
+            for (j = 0; j < vector.length; j++) {
+                oppositeVector[j] = vector[j] * -1;
+            }
+
             this._willCheckInverse = false;
+            this._getNextPointAlongVector(oppositeVector, point);
         };
 
         /**
@@ -385,6 +309,7 @@ $(document).ready(function() {
          *
          * @method _getPlayerAtPoint
          * @for GameLogicVectorController
+         * @param point {array} a point on the game board
          * @requires {number} player number
          */
         GameLogicVectorController.prototype._getPlayerAtPoint = function(point) {
@@ -394,7 +319,6 @@ $(document).ready(function() {
 
             return this._gameBoard[level][row][cell];
         };
-
 
 
         return GameLogicVectorController;
