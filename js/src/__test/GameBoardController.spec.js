@@ -45,6 +45,20 @@ ava('GameBoardController instantiates without any paramaters', t => {
     t.truthy(_isArray(gameBoard._gameBoard));
 });
 
+// ava('.willMove() ', t => {
+//     const gameBoard = new GameBoardController();
+//     const result = gameBoard.willMove(PLAYER_ONE, VALID_POINT_FIRST_LEVEL);
+//
+//     // t.truthy();
+// });
+
+ava('.didMove() returns a boolean', t => {
+    const gameBoard = new GameBoardController();
+    const result = gameBoard.didMove(PLAYER_ONE, VALID_POINT_FIRST_LEVEL);
+
+    t.truthy(result);
+});
+
 ava('.addPlayerAtPoint() returns a boolean and adds point to gameBoard', t => {
     const gameBoard = new GameBoardController();
 
@@ -67,6 +81,27 @@ ava('.addPlayerAtPoint() calls .isPointAvailable() before adding a new point', t
     gameBoard.addPlayerAtPoint(PLAYER_ONE, VALID_POINT_FIRST_LEVEL);
     t.truthy(isPointAvailableSpy.calledOnce);
 });
+
+// ava('.addToHistory() ', t => {
+//     const gameBoard = new GameBoardController();
+// });
+
+ava('.findWinningFormation() ', t => {
+    const existingPlayerPoints = [
+        [0, 1, 0],
+        [0, 1, 1],
+        [0, 1, 2],
+        [0, 1, 3]
+    ];
+    const gameBoard = setupGameBoardTestCase(existingPlayerPoints, PLAYER_ONE);
+    const result = gameBoard.findWinningFormation(PLAYER_ONE, [0, 1, 3]);
+
+    t.truthy(result.type === 'ROW_NATURAL');
+});
+
+// ava('.isWinningFormation()', t => {
+//
+// });
 
 ava('.isPointWithinGameBoard() returns a boolean for if a point is within the gameBoard', t => {
     const gameBoard = new GameBoardController();
@@ -156,25 +191,6 @@ ava('.findAdjacentDirectionsFromPoint() returns an array of valid directions fro
     const point = [0, 0, 0];
     const gameBoard = new GameBoardController();
     const result = gameBoard.findAdjacentDirectionsFromPoint(point);
-    console.log(result);
+
     t.truthy(result.length === 7);
 });
-
-// const playerOnePoints = [[0 3, 3], [0, 3, 1], [0, 3,2]];
-// const playerTwoPoints = [[0, 0, 0,], [0, 0, 1], [0, 0, 3], [0, 3, 3], [0, 3, 2], [1, 0, 0]];
-ava('.calculatePossibleWinFormations() accepts point as a paramater', t => {
-    const point = [1, 2, 0];
-    const gameBoard = new GameBoardController();
-
-    t.notThrows(() => gameBoard.calculatePossibleWinFormations(point));
-});
-
-// const playerOnePoints = [[0, 3, 1], [0, 3, 2], [0 3, 3]];
-// ava('.calculatePossibleWinFormations() returns a list of possible winning formations for a point', t => {
-//     const point = [0, 3, 0];
-//     const existingPlayerPoints = [[0, 3, 1], [0, 3, 2], [0, 3, 3]];
-//     const gameBoard = setupGameBoardTestCase(existingPlayerPoints, PLAYER_ONE);
-//     const result = gameBoard.calculatePossibleWinFormations(point);
-//
-//     console.log(result);
-// });

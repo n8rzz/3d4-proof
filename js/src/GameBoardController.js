@@ -3,7 +3,7 @@ import _filter from 'lodash/filter';
 import _map from 'lodash/map';
 
 import GameHistory from './GameHistory';
-import FormationCalculator from './FormationCalculator';
+import FormationCollection from './Formation/FormationCollection';
 import { directionsFromPoint } from './directionsFromPoint';
 
 /**
@@ -22,6 +22,8 @@ let ID = 0;
 export default class GameBoardController {
     constructor() {
         this._id = ID++;
+        this.formationCollection = new FormationCollection();
+        this.gameHistory = new GameHistory();
         this._gameBoard = [
             [
                 [null, null, null, null],
@@ -50,6 +52,25 @@ export default class GameBoardController {
         ];
     }
 
+    willMove(player, point) {
+        if (!this.addPlayerAtPoint) {
+            return false;
+        }
+
+        return this.didMove(player, point);
+    }
+
+    didMove(player, point) {
+        this.addToHistory(player, point);
+        const winningFormation = this.findWinningFormation(player, point);
+
+        if (winningFormation !== null) {
+            console.log('WINNER', winningFormation);
+        }
+
+        return true;
+    }
+
     /**
      * @method addPlayerAtPoint
      * @param player {number}
@@ -66,7 +87,36 @@ export default class GameBoardController {
         const column = point[2];
 
         this._gameBoard[level][row][column] = player;
-        GameHistory.addPlayerMoveToHistory(player, point);
+
+        return true;
+    }
+
+    addToHistory(player, point) {
+        this.gameHistory.addPlayerMoveToHistory(player, point);
+    }
+
+    findWinningFormation(player, point) {
+        const formations = this.formationCollection.filterFormationsForPoint(point);
+
+        for (let i = 0; i < formations.length; i++) {
+            const formation = formations[i];
+
+            if (this.isWinningFormation(player, formation.points)) {
+                return formation;
+            }
+        }
+
+        return null;
+    }
+
+    isWinningFormation(player, formationPoints) {
+        for (let i = 0; i < formationPoints.length; i++) {
+            const point = formationPoints[i];
+
+            if (this.findPlayerForPoint(point) !== player) {
+                return false;
+            }
+        }
 
         return true;
     }
@@ -107,6 +157,10 @@ export default class GameBoardController {
     isPointAvailable(point) {
         return this.findPlayerForPoint(point) === null;
     }
+
+    // //
+    // DEPRECATE
+    // //
 
     /**
      * @method findAdjacentValidPointsFromPointForPlayer
@@ -161,11 +215,5 @@ export default class GameBoardController {
         });
 
         return _compact(foundDirections);
-    }
-
-    calculatePossibleWinFormations(point) {
-        // findAdjacentDirectionsFromPoint
-        // 
-        //
     }
 }

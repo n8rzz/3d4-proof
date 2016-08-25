@@ -4,22 +4,24 @@
   "description": "This is a test of the logic required to find winning moves in the game 3d4 (Score Four).",
   "main": "index.js",
   "scripts": {
+    "build": "browserify js/src/App.js -t babelify --outfile js/bundle.js",
+    "coverage": "npm test && nyc check-coverage --lines 90",
     "test": "nyc --cache ava --serial --concurrency=5"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/n8rzz/3d4-proof.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Nate Geslin",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/n8rzz/3d4-proof/issues"
   },
-  "homepage": "https://github.com/n8rzz/3d4-proof#readme",
+  "homepage": "https://github.com/n8rzz/3d4-proof",
   "ava": {
     "files": [
-      "js/test/**/*.spec.js",
-      "!js/test/testHelper/**/*"
+      "js/src/__test/**/*.spec.js",
+      "!js/src/__test/testHelper/**/*"
     ],
     "verbose": true,
     "require": [
@@ -29,19 +31,20 @@
   "nyc": {
     "all": true,
     "include": [
-      "js/**/*.js"
+      "js/src/**/*.js"
     ],
     "exclude": [
       "node_modules",
       "vendor",
       "**/*.spec.js",
       "**/*.min.js",
-      "**/test/testHelper",
-      "**/GameLogic.js"
+      "**/__test/testHelper",
+      "**/App.js",
+      "**/GameLogic.js",
+      "**/VictoryController.js"
     ]
   },
   "devDependencies": {
-    "babel-core": "^6.13.2",
     "babel-eslint": "^6.1.2",
     "babel-preset-es2015": "^6.13.2",
     "babel-preset-stage-0": "^6.5.0",
@@ -56,6 +59,9 @@
   },
   "dependencies": {
     "ava": "^0.16.0",
+    "babel": "^6.5.2",
+    "babel-core": "^6.13.2",
+    "babel-polyfill": "^6.13.0",
     "lodash": "^4.15.0",
     "sinon": "^1.17.5"
   }

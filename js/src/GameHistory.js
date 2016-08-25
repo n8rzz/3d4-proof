@@ -1,14 +1,12 @@
-class GameHistory {
+export default class GameHistory {
     constructor() {
-        this._history = {
+        this.history = {
             0: [],
             1: []
         };
     }
 
     addPlayerMoveToHistory(player, point) {
-        this._history[player].push(point);
+        this.history[player].push(point);
     }
 }
-
-export default new GameHistory();
