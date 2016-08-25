@@ -28,33 +28,36 @@ export default class FormationCollection {
     constructor() {
         this.formations = [];
 
-        this._buildFormationModels();
+        this.buildFormationModels();
     }
 
     /**
-     * @method
+     * @method buildFormationModels
      */
-    _buildFormationModels() {
+    buildFormationModels() {
         for (const formation in POSSIBLE_FORMATIONS) {
-            this._createNewModelsFromFormations(formation, POSSIBLE_FORMATIONS[formation]);
+            this.createNewModelsFromFormations(formation, POSSIBLE_FORMATIONS[formation]);
         }
     }
 
     /**
-     * @method
+     * @method createNewModelsFromFormations
+     * @param formationName {string}
+     * @param formationList {array}
      */
-    _createNewModelsFromFormations(formationName, formations) {
-        for (let i = 0; i < formations.length; i++) {
-            const formationModel = new FormationModel(formationName, formations[i]);
+    createNewModelsFromFormations(formationName, formationList) {
+        for (let i = 0; i < formationList.length; i++) {
+            const formationModel = new FormationModel(formationName, formationList[i]);
 
-            this._addFormationToCollection(formationModel);
+            this.addFormationToCollection(formationModel);
         }
     }
 
     /**
-     * @method
+     * @method addFormationToCollection
+     * @param formationToAdd {FormationModel}
      */
-    _addFormationToCollection(formationToAdd) {
+    addFormationToCollection(formationToAdd) {
         if (formationToAdd instanceof FormationModel) {
             this.formations.push(formationToAdd);
         }

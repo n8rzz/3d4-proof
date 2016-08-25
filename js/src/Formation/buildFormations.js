@@ -1,3 +1,5 @@
+const MAX_LENGTH = 4;
+
 export const FORMATION_DIRECTIONS = {
     NATURAL: 'NATURAL',
     ASC: 'ASC',
@@ -53,6 +55,8 @@ export const buildRows = (type = FORMATION_DIRECTIONS.NATURAL) => {
             }
 
             break;
+        default:
+            break;
     }
 
     return allRows;
@@ -105,6 +109,9 @@ export const buildColumns = (type = FORMATION_DIRECTIONS.NATURAL) => {
 
                 allColumns.push(singleColumn);
             }
+
+            break;
+        default:
             break;
     }
 
@@ -116,53 +123,58 @@ export const buildColumns = (type = FORMATION_DIRECTIONS.NATURAL) => {
  * @param type {String}
  * @return diagonals {array}
  */
-export const buildDiagonals = (type = FORMATION_DIRECTIONS.ASC) => {
+export const buildDiagonals = (type = FORMATION_DIRECTIONS.NATURAL) => {
+    let incrementor = 0;
+    let decrementor = 3;
+    let topDiagonal = [];
+    let bottomDiagonal = [];
     const diagonals = [];
 
-    if (type === FORMATION_DIRECTIONS.NATURAL) {
-        for (let level = 0; level < 4; level++) {
-            let decrementor = 3;
-            const topNaturalDiagonal = [];
-            const bottomNaturalDiagonal = [];
+    switch (type) {
+        case FORMATION_DIRECTIONS.NATURAL:
+            for (let level = 0; level < 4; level++) {
+                decrementor = 3;
+                topDiagonal = [];
+                bottomDiagonal = [];
 
+                for (let i = 0; i < 4; i++) {
+                    topDiagonal.push([level, i, i]);
+                    bottomDiagonal.push([level, decrementor, i]);
+
+                    decrementor--;
+                }
+
+                diagonals.push(topDiagonal);
+                diagonals.push(bottomDiagonal);
+            }
+
+            break;
+        case FORMATION_DIRECTIONS.ASC:
             for (let i = 0; i < 4; i++) {
-                topNaturalDiagonal.push([level, i, i]);
-                bottomNaturalDiagonal.push([level, decrementor, i]);
+                topDiagonal.push([i, i, i]);
+                bottomDiagonal.push([i, decrementor, i]);
 
                 decrementor--;
             }
 
-            diagonals.push(topNaturalDiagonal);
-            diagonals.push(bottomNaturalDiagonal);
-        }
-    } else if (type === FORMATION_DIRECTIONS.ASC) {
-        let decrementor = 3;
-        const topDiagonal = [];
-        const bottomDiagonal = [];
+            diagonals.push(topDiagonal);
+            diagonals.push(bottomDiagonal);
 
-        for (let i = 0; i < 4; i++) {
-            topDiagonal.push([i, i, i]);
-            bottomDiagonal.push([i, decrementor, i]);
+            break;
+        case FORMATION_DIRECTIONS.DESC:
+            for (let i = 3; i >= 0; i--) {
+                topDiagonal.push([i, incrementor, incrementor]);
+                bottomDiagonal.push([i, i, incrementor]);
 
-            decrementor--;
-        }
+                incrementor++;
+            }
 
-        diagonals.push(topDiagonal);
-        diagonals.push(bottomDiagonal);
-    } else if (type === FORMATION_DIRECTIONS.DESC) {
-        let incrementor = 0;
-        const topDiagonal = [];
-        const bottomDiagonal = [];
+            diagonals.push(topDiagonal);
+            diagonals.push(bottomDiagonal);
 
-        for (let i = 3; i >= 0; i--) {
-            topDiagonal.push([i, incrementor, incrementor]);
-            bottomDiagonal.push([i, i, incrementor]);
-
-            incrementor++;
-        }
-
-        diagonals.push(topDiagonal);
-        diagonals.push(bottomDiagonal);
+            break;
+        default:
+            break;
     }
 
     return diagonals;

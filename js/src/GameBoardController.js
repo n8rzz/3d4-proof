@@ -52,6 +52,12 @@ export default class GameBoardController {
         ];
     }
 
+    /**
+     * @method willMove
+     * @param player {number}
+     * @param point {array}
+     * @return {boolean}
+     */
     willMove(player, point) {
         if (!this.addPlayerAtPoint) {
             return false;
@@ -60,6 +66,12 @@ export default class GameBoardController {
         return this.didMove(player, point);
     }
 
+    /**
+     * @method didMove
+     * @param player {number}
+     * @param point {array}
+     * @return {boolean}
+     */
     didMove(player, point) {
         this.addToHistory(player, point);
         const winningFormation = this.findWinningFormation(player, point);
@@ -91,10 +103,21 @@ export default class GameBoardController {
         return true;
     }
 
+    /**
+     * @method addToHistory
+     * @param player {number}
+     * @param point {array}
+     */
     addToHistory(player, point) {
         this.gameHistory.addPlayerMoveToHistory(player, point);
     }
 
+    /**
+     * @method findWinningFormation
+     * @param player {number}
+     * @param point {array}
+     * @return {FormationModel|null}
+     */
     findWinningFormation(player, point) {
         const formations = this.formationCollection.filterFormationsForPoint(point);
 
@@ -109,6 +132,12 @@ export default class GameBoardController {
         return null;
     }
 
+    /**
+     * @method isWinningFormation
+     * @param player {number}
+     * @param formationPoints {array}
+     * @return {boolean}
+     */
     isWinningFormation(player, formationPoints) {
         for (let i = 0; i < formationPoints.length; i++) {
             const point = formationPoints[i];

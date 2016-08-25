@@ -19,15 +19,6 @@ export default class FormationModel {
     }
 
     /**
-     *
-     * @method points
-     * @return this.points {array}
-     */
-    // get points() {
-    //     return this.points;
-    // }
-
-    /**
      * @method isPointWithinFormation
      * @param comparePoint {array}
      * @return {boolean}

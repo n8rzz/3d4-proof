@@ -8,19 +8,19 @@ ava('#FormationCollection instantiates without paramaters', t => {
     t.notThrows(() => new FormationCollection());
 });
 
-ava('._buildFormationModels() sets an array of values for formations', t => {
+ava('.buildFormationModels() sets an array of values for formations', t => {
     const collection = new FormationCollection();
     collection.formations = []
 
-    collection._buildFormationModels();
+    collection.buildFormationModels();
     t.truthy(Array.isArray(collection.formations));
 });
 
-// ava('._createNewModelsFromFormations() ', t => {
+// ava('.createNewModelsFromFormations() ', t => {
 //     const collection = new FormationCollection();
 // });
 //
-// ava('._addFormationToCollection() ', t => {
+// ava('.addFormationToCollection() ', t => {
 //     const collection = new FormationCollection();
 // });
 

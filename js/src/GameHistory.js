@@ -1,3 +1,6 @@
+/**
+ * @class GameHistory
+ */
 export default class GameHistory {
     constructor() {
         this.history = {
@@ -6,6 +9,11 @@ export default class GameHistory {
         };
     }
 
+    /**
+     * @method addPlayerMoveToHistory
+     * @param player {number}
+     * @param point {array}
+     */
     addPlayerMoveToHistory(player, point) {
         this.history[player].push(point);
     }
