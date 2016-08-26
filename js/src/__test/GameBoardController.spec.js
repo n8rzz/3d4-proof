@@ -62,24 +62,16 @@ ava('.didMove() returns a boolean', t => {
 ava('.addPlayerAtPoint() returns a boolean and adds point to gameBoard', t => {
     const gameBoard = new GameBoardController();
 
-    t.falsy(gameBoard.addPlayerAtPoint(PLAYER_ONE, INVALID_POINT));
+    t.throws(() => gameBoard.addPlayerAtPoint(PLAYER_ONE, INVALID_POINT));
     t.truthy(gameBoard.addPlayerAtPoint(PLAYER_ONE, VALID_POINT_FIRST_LEVEL));
 });
 
-ava('.addPlayerAtPoint() calls .isPointWithinGameBoard() before adding a new point', t => {
+ava('.addPlayerAtPoint() calls .isValidMove() before adding a new point', t => {
     const gameBoard = new GameBoardController();
-    const isPointWithinGameBoardSpy = sinon.spy(gameBoard, 'isPointWithinGameBoard');
+    const isValidMoveSpy = sinon.spy(gameBoard, 'isValidMove');
 
     gameBoard.addPlayerAtPoint(PLAYER_ONE, VALID_POINT_FIRST_LEVEL);
-    t.truthy(isPointWithinGameBoardSpy.calledOnce);
-});
-
-ava('.addPlayerAtPoint() calls .isPointAvailable() before adding a new point', t => {
-    const gameBoard = new GameBoardController();
-    const isPointAvailableSpy = sinon.spy(gameBoard, 'isPointAvailable');
-
-    gameBoard.addPlayerAtPoint(PLAYER_ONE, VALID_POINT_FIRST_LEVEL);
-    t.truthy(isPointAvailableSpy.calledOnce);
+    t.truthy(isValidMoveSpy.calledOnce);
 });
 
 // ava('.addToHistory() ', t => {
@@ -110,15 +102,6 @@ ava('.isPointWithinGameBoard() returns a boolean for if a point is within the ga
     t.truthy(gameBoard.isPointWithinGameBoard(VALID_POINT_FIRST_LEVEL));
 });
 
-ava('.findPlayerForPoint() returns a player number or null for a point', t => {
-    const existingPlayerPoints = [[0, 0, 0]];
-    const gameBoard = setupGameBoardTestCase(existingPlayerPoints, PLAYER_ONE);
-    const result = gameBoard.findPlayerForPoint(VALID_POINT_FIRST_LEVEL);
-
-    t.falsy(result === null);
-    t.truthy(result === PLAYER_ONE);
-});
-
 ava('.isPointAvailable() returns a boolean for if a point is taken by another players move', t => {
     const existingPlayerPoints = [[0, 0, 0]];
     const gameBoard = setupGameBoardTestCase(existingPlayerPoints, PLAYER_ONE);
@@ -127,70 +110,19 @@ ava('.isPointAvailable() returns a boolean for if a point is taken by another pl
     t.truthy(gameBoard.isPointAvailable(VALID_POINT_SECOND_LEVEL));
 });
 
-ava('.findAdjacentValidPointsFromPointForPlayer() returns a list of gameBoard positions for a player adjacent to a point', t => {
-    const startingPoint = [1, 2, 0];
-    const existingPlayerPoints = [
-        [1, 1, 0],
-        [1, 2, 1],
-        [1, 3, 1]
-    ];
-
+ava('.isValidMove() returns a boolean for if a point is available to place a new move', t => {
+    const existingPlayerPoints = [[0, 0, 0]];
     const gameBoard = setupGameBoardTestCase(existingPlayerPoints, PLAYER_ONE);
-    const result = gameBoard.findAdjacentValidPointsFromPointForPlayer(PLAYER_ONE, startingPoint);
 
-    t.truthy(_isEqual(existingPlayerPoints[0], result[0]));
-    t.truthy(_isEqual(existingPlayerPoints[1], result[1]));
-    t.truthy(_isEqual(existingPlayerPoints[2], result[2]));
+    t.falsy(gameBoard.isValidMove(VALID_POINT_FIRST_LEVEL));
+    t.truthy(gameBoard.isValidMove(VALID_POINT_SECOND_LEVEL));
 });
 
-ava('.findAdjacentValidPointsFromPointForPlayer() calls .isPointWithinGameBoard() to verify each adjacent point', t => {
-    const startingPoint = [1, 2, 0];
-    const existingPlayerPoints = [
-        [1, 1, 0],
-        [1, 2, 1],
-        [1, 3, 1]
-    ];
-
+ava('.findPlayerForPoint() returns a player number or null for a point', t => {
+    const existingPlayerPoints = [[0, 0, 0]];
     const gameBoard = setupGameBoardTestCase(existingPlayerPoints, PLAYER_ONE);
-    const isPointWithinGameBoardSpy = sinon.spy(gameBoard, 'isPointWithinGameBoard');
+    const result = gameBoard.findPlayerForPoint(VALID_POINT_FIRST_LEVEL);
 
-    gameBoard.findAdjacentValidPointsFromPointForPlayer(PLAYER_ONE, startingPoint);
-    t.truthy(isPointWithinGameBoardSpy.called);
-});
-
-ava('.findAdjacentValidPointsFromPointForPlayer() calls .findPlayerForPoint() to verify each adjacent point', t => {
-    const startingPoint = [1, 2, 0];
-    const existingPlayerPoints = [
-        [1, 1, 0],
-        [1, 2, 1],
-        [1, 3, 1]
-    ];
-
-    const gameBoard = setupGameBoardTestCase(existingPlayerPoints, PLAYER_ONE);
-    const findPlayerForPointSpy = sinon.spy(gameBoard, 'findPlayerForPoint');
-
-    gameBoard.findAdjacentValidPointsFromPointForPlayer(PLAYER_ONE, startingPoint);
-    t.truthy(findPlayerForPointSpy.called);
-});
-
-ava('.findAdjacentValidPointsFromPoint() returns an array', t => {
-    const startingPoint = [1, 2, 0];
-    const existingPlayerPoints = [
-        [1, 1, 0],
-        [1, 2, 1],
-        [1, 3, 1]
-    ];
-
-    const gameBoard = setupGameBoardTestCase(existingPlayerPoints, PLAYER_ONE);
-    const result = gameBoard.findAdjacentValidPointsFromPoint(startingPoint);
-
-    t.truthy(_isArray(result));
-});
-
-ava('.findAdjacentDirectionsFromPoint() returns an array of valid directions from a point', t => {
-    const point = [0, 0, 0];
-    const gameBoard = new GameBoardController();
-    const result = gameBoard.findAdjacentDirectionsFromPoint(point);
-
-    t.truthy(result.length === 7);
+    t.falsy(result === null);
+    t.truthy(result === PLAYER_ONE);
 });

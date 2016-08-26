@@ -25,6 +25,10 @@ const POSSIBLE_FORMATIONS = {
  * @class FormationCollection
  */
 export default class FormationCollection {
+    /**
+     * @for FormationCollection
+     * @constructor
+     */
     constructor() {
         this.formations = [];
 
@@ -32,6 +36,7 @@ export default class FormationCollection {
     }
 
     /**
+     * @for FormationCollection
      * @method buildFormationModels
      */
     buildFormationModels() {
@@ -41,6 +46,7 @@ export default class FormationCollection {
     }
 
     /**
+     * @for FormationCollection
      * @method createNewModelsFromFormations
      * @param formationName {string}
      * @param formationList {array}
@@ -54,6 +60,7 @@ export default class FormationCollection {
     }
 
     /**
+     * @for FormationCollection
      * @method addFormationToCollection
      * @param formationToAdd {FormationModel}
      */
@@ -64,6 +71,7 @@ export default class FormationCollection {
     }
 
     /**
+     * @for FormationCollection
      * @method filterFormationsForPoint
      * @param point {array}
      * @return filteredFormations {array}

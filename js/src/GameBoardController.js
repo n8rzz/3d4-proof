@@ -1,10 +1,5 @@
-import _compact from 'lodash/compact';
-import _filter from 'lodash/filter';
-import _map from 'lodash/map';
-
 import GameHistory from './GameHistory';
 import FormationCollection from './Formation/FormationCollection';
-import { directionsFromPoint } from './directionsFromPoint';
 
 /**
  * Unique id for the controller. Should only be useful for testing, as there should only really be one
@@ -20,6 +15,10 @@ let ID = 0;
  * @class GameBoardController
  */
 export default class GameBoardController {
+    /**
+     * @for GameBoardController
+     * @constructor
+     */
     constructor() {
         this._id = ID++;
         this.formationCollection = new FormationCollection();
@@ -53,13 +52,14 @@ export default class GameBoardController {
     }
 
     /**
+     * @for GameBoardController
      * @method willMove
      * @param player {number}
      * @param point {array}
      * @return {boolean}
      */
     willMove(player, point) {
-        if (!this.addPlayerAtPoint) {
+        if (!this.addPlayerAtPoint(player, point)) {
             return false;
         }
 
@@ -67,6 +67,7 @@ export default class GameBoardController {
     }
 
     /**
+     * @for GameBoardController
      * @method didMove
      * @param player {number}
      * @param point {array}
@@ -78,19 +79,21 @@ export default class GameBoardController {
 
         if (winningFormation !== null) {
             console.log('WINNER', winningFormation);
+            alert(`Player ${player + 1} - WINNER!!`);
         }
 
         return true;
     }
 
     /**
+     * @for GameBoardController
      * @method addPlayerAtPoint
      * @param player {number}
      * @param point {array}
      * @return {boolean}
      */
     addPlayerAtPoint(player, point) {
-        if (!this.isPointWithinGameBoard(point) || !this.isPointAvailable(point)) {
+        if (!this.isValidMove(point)) {
             return false;
         }
 
@@ -104,6 +107,7 @@ export default class GameBoardController {
     }
 
     /**
+     * @for GameBoardController
      * @method addToHistory
      * @param player {number}
      * @param point {array}
@@ -113,6 +117,7 @@ export default class GameBoardController {
     }
 
     /**
+     * @for GameBoardController
      * @method findWinningFormation
      * @param player {number}
      * @param point {array}
@@ -133,6 +138,7 @@ export default class GameBoardController {
     }
 
     /**
+     * @for GameBoardController
      * @method isWinningFormation
      * @param player {number}
      * @param formationPoints {array}
@@ -151,6 +157,21 @@ export default class GameBoardController {
     }
 
     /**
+     * @for GameBoardController
+     * @method findPlayerForPoint
+     * @param point {array}
+     * @return {number|null}
+     */
+    findPlayerForPoint(point) {
+        const level = point[0];
+        const row = point[1];
+        const column = point[2];
+
+        return this._gameBoard[level][row][column];
+    }
+
+    /**
+     * @for GameBoardController
      * @method isPointWithinGameBoard
      * @param point {array}
      * @return {boolean}
@@ -166,19 +187,7 @@ export default class GameBoardController {
     }
 
     /**
-     * @method findPlayerForPoint
-     * @param point {array}
-     * @return {number|null}
-     */
-    findPlayerForPoint(point) {
-        const level = point[0];
-        const row = point[1];
-        const column = point[2];
-
-        return this._gameBoard[level][row][column];
-    }
-
-    /**
+     * @for GameBoardController
      * @method isPointAvailable
      * @param point {array}
      * @return {boolean}
@@ -187,62 +196,21 @@ export default class GameBoardController {
         return this.findPlayerForPoint(point) === null;
     }
 
-    // //
-    // DEPRECATE
-    // //
-
     /**
-     * @method findAdjacentValidPointsFromPointForPlayer
-     * @param player {number}
+     * @for GameBoardController
+     * @method isValidMove
      * @param point {array}
-     * @return {array}
+     * @return {boolean}
      */
-    findAdjacentValidPointsFromPointForPlayer(player, point) {
-        const foundPoints = this.findAdjacentValidPointsFromPoint(point);
-        const playerPoints = _filter(foundPoints, (p) => {
-            return this.findPlayerForPoint(p) === player;
-        });
+    isValidMove(point) {
+        if (point[0] === 0) {
+            return this.isPointAvailable(point);
+        }
 
-        return playerPoints;
-    }
+        const level = point[0] - 1;
+        const row = point[1];
+        const cell = point[2];
 
-    /**
-     * @method findAdjacentValidPointsFromPoint
-     * @param point {array}
-     * @return {array}
-     */
-    findAdjacentValidPointsFromPoint(point) {
-        const foundPoints = _map(directionsFromPoint, (d) => {
-            const level = point[0] + d[0];
-            const row = point[1] + d[1];
-            const column = point[2] + d[2];
-            const foundPoint = [level, row, column];
-
-            return this.isPointWithinGameBoard(foundPoint)
-                ? foundPoint
-                : false;
-        });
-
-        return _compact(foundPoints);
-    }
-
-    /**
-     * @method findAdjacentDirectionsFromPoint
-     * @param point {array}
-     * @return foundDirections {array}
-     */
-    findAdjacentDirectionsFromPoint(point) {
-        const foundDirections = _map(directionsFromPoint, (direction) => {
-            const level = point[0] + direction[0];
-            const row = point[1] + direction[1];
-            const column = point[2] + direction[2];
-            const foundPoint = [level, row, column];
-
-            return this.isPointWithinGameBoard(foundPoint)
-                ? direction
-                : false;
-        });
-
-        return _compact(foundDirections);
+        return this.isPointAvailable(point) && this._gameBoard[level][row][cell] !== null;
     }
 }
