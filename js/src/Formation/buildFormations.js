@@ -16,11 +16,11 @@ export const buildRows = (type = FORMATION_DIRECTIONS.NATURAL) => {
 
     switch (type) {
         case FORMATION_DIRECTIONS.NATURAL:
-            for (let level = 0; level < 4; level++) {
-                for (let row = 0; row < 4; row++) {
+            for (let level = 0; level < MAX_LENGTH; level++) {
+                for (let row = 0; row < MAX_LENGTH; row++) {
                     const singleRow = [];
 
-                    for (let cell = 0; cell < 4; cell++) {
+                    for (let cell = 0; cell < MAX_LENGTH; cell++) {
                         singleRow.push([level, row, cell]);
                     }
 
@@ -30,10 +30,10 @@ export const buildRows = (type = FORMATION_DIRECTIONS.NATURAL) => {
 
             break;
         case FORMATION_DIRECTIONS.ASC:
-            for (let row = 0; row < 4; row++) {
+            for (let row = 0; row < MAX_LENGTH; row++) {
                 const singleRow = [];
 
-                for (let levelAndCell = 0; levelAndCell < 4; levelAndCell++) {
+                for (let levelAndCell = 0; levelAndCell < MAX_LENGTH; levelAndCell++) {
                     singleRow.push([levelAndCell, row, levelAndCell]);
                 }
 
@@ -42,11 +42,11 @@ export const buildRows = (type = FORMATION_DIRECTIONS.NATURAL) => {
 
             break;
         case FORMATION_DIRECTIONS.DESC:
-            for (let row = 0; row < 4; row++) {
+            for (let row = 0; row < MAX_LENGTH; row++) {
                 let decrementor = 3;
                 const singleRow = [];
 
-                for (let cell = 0; cell < 4; cell++) {
+                for (let cell = 0; cell < MAX_LENGTH; cell++) {
                     singleRow.push([decrementor, row, cell]);
                     decrementor--;
                 }
@@ -72,11 +72,11 @@ export const buildColumns = (type = FORMATION_DIRECTIONS.NATURAL) => {
 
     switch (type) {
         case FORMATION_DIRECTIONS.NATURAL:
-            for (let level = 0; level < 4; level++) {
-                for (let column = 0; column < 4; column++) {
+            for (let level = 0; level < MAX_LENGTH; level++) {
+                for (let column = 0; column < MAX_LENGTH; column++) {
                     const singleColumn = [];
 
-                    for (let row = 0; row < 4; row++) {
+                    for (let row = 0; row < MAX_LENGTH; row++) {
                         singleColumn.push([level, row, column]);
                     }
 
@@ -86,10 +86,10 @@ export const buildColumns = (type = FORMATION_DIRECTIONS.NATURAL) => {
 
             break;
         case FORMATION_DIRECTIONS.ASC:
-            for (let column = 0; column < 4; column++) {
+            for (let column = 0; column < MAX_LENGTH; column++) {
                 const singleColumn = [];
 
-                for (let levelAndRow = 0; levelAndRow < 4; levelAndRow++) {
+                for (let levelAndRow = 0; levelAndRow < MAX_LENGTH; levelAndRow++) {
                     singleColumn.push([levelAndRow, levelAndRow, column]);
                 }
 
@@ -98,11 +98,11 @@ export const buildColumns = (type = FORMATION_DIRECTIONS.NATURAL) => {
 
             break;
         case FORMATION_DIRECTIONS.DESC:
-            for (let column = 0; column < 4; column++) {
+            for (let column = 0; column < MAX_LENGTH; column++) {
                 let decrementor = 3;
                 const singleColumn = [];
 
-                for (let row = 0; row < 4; row++) {
+                for (let row = 0; row < MAX_LENGTH; row++) {
                     singleColumn.push([decrementor, column, row]);
                     decrementor--;
                 }
@@ -132,12 +132,12 @@ export const buildDiagonals = (type = FORMATION_DIRECTIONS.NATURAL) => {
 
     switch (type) {
         case FORMATION_DIRECTIONS.NATURAL:
-            for (let level = 0; level < 4; level++) {
+            for (let level = 0; level < MAX_LENGTH; level++) {
                 decrementor = 3;
                 topDiagonal = [];
                 bottomDiagonal = [];
 
-                for (let i = 0; i < 4; i++) {
+                for (let i = 0; i < MAX_LENGTH; i++) {
                     topDiagonal.push([level, i, i]);
                     bottomDiagonal.push([level, decrementor, i]);
 
@@ -150,7 +150,7 @@ export const buildDiagonals = (type = FORMATION_DIRECTIONS.NATURAL) => {
 
             break;
         case FORMATION_DIRECTIONS.ASC:
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < MAX_LENGTH; i++) {
                 topDiagonal.push([i, i, i]);
                 bottomDiagonal.push([i, decrementor, i]);
 
@@ -187,11 +187,11 @@ export const buildDiagonals = (type = FORMATION_DIRECTIONS.NATURAL) => {
 export const buildStacks = () => {
     const allStacks = [];
 
-    for (let row = 0; row < 4; row++) {
-        for (let cell = 0; cell < 4; cell++) {
+    for (let row = 0; row < MAX_LENGTH; row++) {
+        for (let cell = 0; cell < MAX_LENGTH; cell++) {
             const singleStack = [];
 
-            for (let level = 0; level < 4; level++) {
+            for (let level = 0; level < MAX_LENGTH; level++) {
                 singleStack.push([level, row, cell]);
             }
 

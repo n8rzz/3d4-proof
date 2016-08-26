@@ -40,7 +40,7 @@ export default class FormationCollection {
      * @method buildFormationModels
      */
     buildFormationModels() {
-        for (const formation in POSSIBLE_FORMATIONS) {
+        for (let formation in POSSIBLE_FORMATIONS) {
             this.createNewModelsFromFormations(formation, POSSIBLE_FORMATIONS[formation]);
         }
     }

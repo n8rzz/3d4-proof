@@ -1,12 +1,21 @@
+import {
+    LEVEL,
+    ROW,
+    COLUMN
+} from '../constants';
+
 let ID = 0;
-const LEVEL = 0;
-const ROW = 1;
-const COLUMN = 2;
 
 /**
  * @class FormationModel
  */
 export default class FormationModel {
+    /**
+     * @for FormationModel
+     * @constructor
+     * @param formationType {string}
+     * @param points {array}
+     */
     constructor(formationType = '', points = 0) {
         if (formationType === '' || points.length === 0) {
             throw new TypeError('Invalid parameters passed to FormationModel');

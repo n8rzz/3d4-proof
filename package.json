@@ -4,7 +4,7 @@
   "description": "This is a test of the logic required to find winning moves in the game 3d4 (Score Four).",
   "main": "index.js",
   "scripts": {
-    "build": "browserify js/src/App.js -t babelify --debug | exorcist js/bundle.js.map > js/bundle.js",
+    "build": "rm js/bundle.js.map && browserify js/src/App.js -t babelify --debug | exorcist js/bundle.js.map > js/bundle.js",
     "bundle": "browserify js/src/App.js -t babelify --outfile js/bundle.js",
     "coverage": "npm test && nyc check-coverage --lines 90",
     "test": "nyc --require babel-core/register -a ava --serial --concurrency=5",

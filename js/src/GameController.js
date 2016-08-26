@@ -1,7 +1,4 @@
-const PLAYER = {
-    ONE: 0,
-    TWO: 1
-};
+import { PLAYER } from './constants';
 
 /**
  * @class GameController
@@ -83,40 +80,56 @@ export default class GameController {
         const level = parseInt($target.parentElement.dataset.levelId, 10);
         const row = parseInt($target.parentElement.dataset.rowId, 10);
         const column = parseInt($target.dataset.cellId, 10);
-        const moveToMake = [level, row, column];
+        const playerMove = [level, row, column];
 
-        return this.willExecutePlayerMove($target, moveToMake);
+        return this.willExecutePlayerMove($target, playerMove);
     }
 
     /**
      * @for GameController
      * @method willExecutePlayerMove
+     * @param $target {HTMLElement}
+     * @param playerMove {array}
      */
-    willExecutePlayerMove($target, moveToMake) {
-        if (!this.isValidMove(moveToMake)) {
+    willExecutePlayerMove($target, playerMove) {
+        if (!this.isValidMove(playerMove)) {
             alert('Move is invalid, please make a valid move');
             return;
         }
 
-        this.executePlayerMove(moveToMake);
-        this.didExecutePlayerMove($target);
+        this.executePlayerMove($target, playerMove);
+        this.didExecutePlayerMove($target, playerMove);
     }
 
     /**
      * @for GameController
      * @method executePlayerMove
+     * @param $target {HTMLElement}
+     * @param playerMove {array}
      */
-    executePlayerMove(point) {
-        this.gameBoardController.willMove(this.activePlayer, point);
+    executePlayerMove($target, playerMove) {
+        this.gameBoardController.addPlayerAtPoint(this.activePlayer, playerMove);
+        this.gameView.updateGameBoardWithPlayerPiece(this.activePlayer, $target);
     }
 
     /**
      * @for GameController
      * @method didExecutePlayerMove
+     * @param $target {HTMLElement}
+     * @param playerMove {array}
      */
-    didExecutePlayerMove($target) {
-        this.gameView.changeActivePlayerText(this.activePlayer, $target);
-        this.playerDidMove();
+    didExecutePlayerMove($target, playerMove) {
+        this.gameBoardController.addToHistory(this.activePlayer, playerMove);
+
+        const winningFormation = this.gameBoardController.findWinningFormation(this.activePlayer, playerMove);
+        if (winningFormation !== null) {
+            console.log('WINNER', winningFormation);
+            alert(`Player ${this.activePlayer + 1} - WINNER!!`);
+
+            return this.disable();
+        }
+
+        this.changeActivePlayer();
 
         return this;
     }
@@ -124,6 +137,7 @@ export default class GameController {
     /**
      * @for GameController
      * @method isValidMove
+     * @param point {array}
      */
     isValidMove(point) {
         return this.gameBoardController.isValidMove(point);
@@ -131,16 +145,14 @@ export default class GameController {
 
     /**
      * @for GameController
-     * @method playerDidMove
+     * @method changeActivePlayer
      */
-    playerDidMove() {
-        if (this.activePlayer === PLAYER.ONE) {
-            this.activePlayer = PLAYER.TWO;
-            this.gameView.changePlayer(PLAYER.TWO);
-        } else {
-            this.activePlayer = PLAYER.ONE;
-            this.gameView.changePlayer(PLAYER.ONE);
-        }
+    changeActivePlayer() {
+        this.activePlayer = this.activePlayer === PLAYER.ONE
+            ? PLAYER.TWO
+            : PLAYER.ONE;
+
+        this.gameView.changeActivePlayerText(this.activePlayer);
 
         return this;
     }

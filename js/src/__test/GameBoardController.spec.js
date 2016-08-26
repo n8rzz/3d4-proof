@@ -2,25 +2,11 @@
 import ava from 'ava';
 import sinon from 'sinon';
 import _isArray from 'lodash/isArray';
-import _isEqual from 'lodash/isEqual';
 
 import GameBoardController from '../GameBoardController';
-// import {
-//     row,
-//     column,
-//     stack,
-//     ascendingStaircaseRow,
-//     ascendingStaircaseColumn,
-//     descendingStaircaseRow,
-//     descendingStaircaseColumn,
-//     diagonalCorner,
-//     ascendingCorner,
-//     descendingCorner
-// } from './testHelper/setupGameBoard';
 
 import {
     PLAYER_ONE,
-    PLAYER_TWO,
     VALID_POINT_FIRST_LEVEL,
     VALID_POINT_SECOND_LEVEL,
     INVALID_POINT
@@ -45,20 +31,6 @@ ava('GameBoardController instantiates without any paramaters', t => {
     t.truthy(_isArray(gameBoard._gameBoard));
 });
 
-// ava('.willMove() ', t => {
-//     const gameBoard = new GameBoardController();
-//     const result = gameBoard.willMove(PLAYER_ONE, VALID_POINT_FIRST_LEVEL);
-//
-//     // t.truthy();
-// });
-
-ava('.didMove() returns a boolean', t => {
-    const gameBoard = new GameBoardController();
-    const result = gameBoard.didMove(PLAYER_ONE, VALID_POINT_FIRST_LEVEL);
-
-    t.truthy(result);
-});
-
 ava('.addPlayerAtPoint() returns a boolean and adds point to gameBoard', t => {
     const gameBoard = new GameBoardController();
 
@@ -78,29 +50,33 @@ ava('.addPlayerAtPoint() calls .isValidMove() before adding a new point', t => {
 //     const gameBoard = new GameBoardController();
 // });
 
-ava('.findWinningFormation() ', t => {
-    const existingPlayerPoints = [
-        [0, 1, 0],
-        [0, 1, 1],
-        [0, 1, 2],
-        [0, 1, 3]
-    ];
-    const gameBoard = setupGameBoardTestCase(existingPlayerPoints, PLAYER_ONE);
-    const result = gameBoard.findWinningFormation(PLAYER_ONE, [0, 1, 3]);
-
-    t.truthy(result.type === 'ROW_NATURAL');
-});
+// ava('.findWinningFormation() returns early if there are less than 7 points played', t => {
+//     const gameBoard = setupGameBoardTestCase([0, 0, 0], PLAYER_ONE);
+//     const result = gameBoard.findWinningFormation(PLAYER_ONE, [0, 1, 3]);
+//
+//     t.truthy(result === null);
+// });
+//
+// ava('.findWinningFormation() ', t => {
+//     const existingPlayerPoints = [
+//         [0, 0, 0],
+//         [0, 0, 1],
+//         [0, 0, 2],
+//         [0, 0, 3]
+//         [0, 1, 0],
+//         [0, 1, 1],
+//         [0, 1, 2],
+//         [0, 1, 3]
+//     ];
+//     const gameBoard = setupGameBoardTestCase(existingPlayerPoints, PLAYER_ONE);
+//     const result = gameBoard.findWinningFormation(PLAYER_ONE, [0, 1, 3]);
+//
+//     t.truthy(result.type === 'ROW_NATURAL');
+// });
 
 // ava('.isWinningFormation()', t => {
 //
 // });
-
-ava('.isPointWithinGameBoard() returns a boolean for if a point is within the gameBoard', t => {
-    const gameBoard = new GameBoardController();
-
-    t.falsy(gameBoard.isPointWithinGameBoard(INVALID_POINT));
-    t.truthy(gameBoard.isPointWithinGameBoard(VALID_POINT_FIRST_LEVEL));
-});
 
 ava('.isPointAvailable() returns a boolean for if a point is taken by another players move', t => {
     const existingPlayerPoints = [[0, 0, 0]];

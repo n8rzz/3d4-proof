@@ -1,5 +1,10 @@
 import GameHistory from './GameHistory';
 import FormationCollection from './Formation/FormationCollection';
+import {
+    LEVEL,
+    ROW,
+    COLUMN
+} from './constants';
 
 /**
  * Unique id for the controller. Should only be useful for testing, as there should only really be one
@@ -53,36 +58,30 @@ export default class GameBoardController {
 
     /**
      * @for GameBoardController
-     * @method willMove
-     * @param player {number}
+     * @method isPointAvailable
      * @param point {array}
      * @return {boolean}
      */
-    willMove(player, point) {
-        if (!this.addPlayerAtPoint(player, point)) {
-            return false;
-        }
-
-        return this.didMove(player, point);
+    isPointAvailable(point) {
+        return this.findPlayerForPoint(point) === null;
     }
 
     /**
      * @for GameBoardController
-     * @method didMove
-     * @param player {number}
+     * @method isValidMove
      * @param point {array}
      * @return {boolean}
      */
-    didMove(player, point) {
-        this.addToHistory(player, point);
-        const winningFormation = this.findWinningFormation(player, point);
-
-        if (winningFormation !== null) {
-            console.log('WINNER', winningFormation);
-            alert(`Player ${player + 1} - WINNER!!`);
+    isValidMove(point) {
+        if (point[LEVEL] === 0) {
+            return this.isPointAvailable(point);
         }
 
-        return true;
+        const level = point[LEVEL] - 1;
+        const row = point[ROW];
+        const cell = point[COLUMN];
+
+        return this.isPointAvailable(point) && this._gameBoard[level][row][cell] !== null;
     }
 
     /**
@@ -97,9 +96,9 @@ export default class GameBoardController {
             return false;
         }
 
-        const level = point[0];
-        const row = point[1];
-        const column = point[2];
+        const level = point[LEVEL];
+        const row = point[ROW];
+        const column = point[COLUMN];
 
         this._gameBoard[level][row][column] = player;
 
@@ -124,17 +123,37 @@ export default class GameBoardController {
      * @return {FormationModel|null}
      */
     findWinningFormation(player, point) {
+        console.log(this.gameHistory);
+        if (this.gameHistory.length < 7) {
+            return null;
+        }
+
         const formations = this.formationCollection.filterFormationsForPoint(point);
 
         for (let i = 0; i < formations.length; i++) {
             const formation = formations[i];
 
             if (this.isWinningFormation(player, formation.points)) {
+                this.gameHistory.reportGameHistory();
                 return formation;
             }
         }
 
         return null;
+    }
+
+    /**
+     * @for GameBoardController
+     * @method findPlayerForPoint
+     * @param point {array}
+     * @return {number|null}
+     */
+    findPlayerForPoint(point) {
+        const level = point[LEVEL];
+        const row = point[ROW];
+        const column = point[COLUMN];
+
+        return this._gameBoard[level][row][column];
     }
 
     /**
@@ -154,63 +173,5 @@ export default class GameBoardController {
         }
 
         return true;
-    }
-
-    /**
-     * @for GameBoardController
-     * @method findPlayerForPoint
-     * @param point {array}
-     * @return {number|null}
-     */
-    findPlayerForPoint(point) {
-        const level = point[0];
-        const row = point[1];
-        const column = point[2];
-
-        return this._gameBoard[level][row][column];
-    }
-
-    /**
-     * @for GameBoardController
-     * @method isPointWithinGameBoard
-     * @param point {array}
-     * @return {boolean}
-     */
-    isPointWithinGameBoard(point) {
-        for (let i = 0; i < point.length; i++) {
-            if (point[i] < 0 || point[i] > 3) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @for GameBoardController
-     * @method isPointAvailable
-     * @param point {array}
-     * @return {boolean}
-     */
-    isPointAvailable(point) {
-        return this.findPlayerForPoint(point) === null;
-    }
-
-    /**
-     * @for GameBoardController
-     * @method isValidMove
-     * @param point {array}
-     * @return {boolean}
-     */
-    isValidMove(point) {
-        if (point[0] === 0) {
-            return this.isPointAvailable(point);
-        }
-
-        const level = point[0] - 1;
-        const row = point[1];
-        const cell = point[2];
-
-        return this.isPointAvailable(point) && this._gameBoard[level][row][cell] !== null;
     }
 }

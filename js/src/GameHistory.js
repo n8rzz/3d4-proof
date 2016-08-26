@@ -3,6 +3,7 @@
  */
 export default class GameHistory {
     constructor() {
+        this.length = 0;
         this.history = {
             0: [],
             1: []
@@ -16,5 +17,10 @@ export default class GameHistory {
      */
     addPlayerMoveToHistory(player, point) {
         this.history[player].push(point);
+        this.length++;
+    }
+
+    reportGameHistory() {
+        console.log(this.history);
     }
 }
