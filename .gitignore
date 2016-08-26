@@ -2,5 +2,5 @@
 coverage/
 js/bundle.js
 js/bundle.js.map
-npm-debug.log/
+npm-debug.log
 node_modules/
