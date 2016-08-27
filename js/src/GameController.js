@@ -18,6 +18,7 @@ export default class GameController {
         this.gameView = gameView;
         this.gameBoardController = gameBoardController;
         this.activePlayer = 0;
+        this.isGameInProgress = false;
 
         return this.createChildren()
                     .enable();
@@ -39,9 +40,17 @@ export default class GameController {
      * @method enable
      */
     enable() {
+        if (this.isGameInProgress) {
+            return this;
+        }
+
         Array.from(this.$cell).forEach((event) => {
             event.addEventListener('click', (e) => this.onClick(e));
         });
+
+        this.isGameInProgress = true;
+
+        return this;
     }
 
     /**
@@ -49,9 +58,17 @@ export default class GameController {
      * @method disable
      */
     disable() {
+        if (!this.isGameInProgress) {
+            return this;
+        }
+
         Array.from(this.$cell).forEach((event) => {
             event.removeEventListener('click', (e) => this.onClick(e));
         });
+
+        this.isGameInProgress = false;
+
+        return this;
     }
 
     /**
@@ -59,6 +76,10 @@ export default class GameController {
      * @method destroy
      */
     destroy() {
+        if (this.isGameInProgress) {
+            return this;
+        }
+
         this.$element = null;
         this.$row = null;
         this.$cell = null;
@@ -75,6 +96,10 @@ export default class GameController {
      */
     onClick(event) {
         event.preventDefault();
+
+        if (!this.isGameInProgress) {
+            return this;
+        }
 
         const $target = event.currentTarget;
         const level = parseInt($target.parentElement.dataset.levelId, 10);
