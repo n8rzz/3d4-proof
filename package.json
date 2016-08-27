@@ -44,8 +44,6 @@
       "**/*.min.js",
       "**/__test/testHelper",
       "**/App.js",
-      "**/GameLogic.js",
-      "**/VictoryController.js",
       "**/bundle.js",
       "**/bundle.js.map"
     ]
