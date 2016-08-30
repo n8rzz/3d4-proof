@@ -223,12 +223,12 @@ export const POSSIBLE_FORMATIONS = {
 /**
  * Instantiate new FormationModels from a list of formations
  *
-* @function createNewModelsFromFormations
+* @function createNewModelsFromFormationList
 * @param formationName {string}
 * @param formationList {array}
 * @return formationModels {array}
 */
-const createNewModelsFromFormations = (formationName, formationList) => {
+const createNewModelsFromFormationList = (formationName, formationList) => {
     const formationModels = [];
 
     for (let i = 0; i < formationList.length; i++) {
@@ -250,7 +250,7 @@ export const buildFormationModelsFromPossibleFormations = () => {
     const formationModelList = [];
 
     for (let formation in POSSIBLE_FORMATIONS) {
-        formationModelList.push(...createNewModelsFromFormations(formation, POSSIBLE_FORMATIONS[formation]));
+        formationModelList.push(...createNewModelsFromFormationList(formation, POSSIBLE_FORMATIONS[formation]));
     }
 
     return formationModelList;
