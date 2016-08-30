@@ -24,7 +24,7 @@ export const buildRows = (type = FORMATION_DIRECTIONS.NATURAL) => {
                     const singleRow = [];
 
                     for (let cell = 0; cell < MAX_LENGTH; cell++) {
-                        singleRow.push([level, row, cell]);
+                        singleRow.push(new FormationPointModel(level, row, cell));
                     }
 
                     allRows.push(singleRow);
@@ -37,7 +37,7 @@ export const buildRows = (type = FORMATION_DIRECTIONS.NATURAL) => {
                 const singleRow = [];
 
                 for (let levelAndCell = 0; levelAndCell < MAX_LENGTH; levelAndCell++) {
-                    singleRow.push([levelAndCell, row, levelAndCell]);
+                    singleRow.push(new FormationPointModel(levelAndCell, row, levelAndCell));
                 }
 
                 allRows.push(singleRow);
@@ -50,7 +50,7 @@ export const buildRows = (type = FORMATION_DIRECTIONS.NATURAL) => {
                 const singleRow = [];
 
                 for (let cell = 0; cell < MAX_LENGTH; cell++) {
-                    singleRow.push([decrementor, row, cell]);
+                    singleRow.push(new FormationPointModel(decrementor, row, cell));
                     decrementor--;
                 }
 
@@ -80,7 +80,7 @@ export const buildColumns = (type = FORMATION_DIRECTIONS.NATURAL) => {
                     const singleColumn = [];
 
                     for (let row = 0; row < MAX_LENGTH; row++) {
-                        singleColumn.push([level, row, column]);
+                        singleColumn.push(new FormationPointModel(level, row, column));
                     }
 
                     allColumns.push(singleColumn);
@@ -93,7 +93,7 @@ export const buildColumns = (type = FORMATION_DIRECTIONS.NATURAL) => {
                 const singleColumn = [];
 
                 for (let levelAndRow = 0; levelAndRow < MAX_LENGTH; levelAndRow++) {
-                    singleColumn.push([levelAndRow, levelAndRow, column]);
+                    singleColumn.push(new FormationPointModel(levelAndRow, levelAndRow, column));
                 }
 
                 allColumns.push(singleColumn);
@@ -106,7 +106,7 @@ export const buildColumns = (type = FORMATION_DIRECTIONS.NATURAL) => {
                 const singleColumn = [];
 
                 for (let row = 0; row < MAX_LENGTH; row++) {
-                    singleColumn.push([decrementor, column, row]);
+                    singleColumn.push(new FormationPointModel(decrementor, column, row));
                     decrementor--;
                 }
 
@@ -141,8 +141,8 @@ export const buildDiagonals = (type = FORMATION_DIRECTIONS.NATURAL) => {
                 bottomDiagonal = [];
 
                 for (let i = 0; i < MAX_LENGTH; i++) {
-                    topDiagonal.push([level, i, i]);
-                    bottomDiagonal.push([level, decrementor, i]);
+                    topDiagonal.push(new FormationPointModel(level, i, i));
+                    bottomDiagonal.push(new FormationPointModel(level, decrementor, i));
 
                     decrementor--;
                 }
@@ -154,8 +154,8 @@ export const buildDiagonals = (type = FORMATION_DIRECTIONS.NATURAL) => {
             break;
         case FORMATION_DIRECTIONS.ASC:
             for (let i = 0; i < MAX_LENGTH; i++) {
-                topDiagonal.push([i, i, i]);
-                bottomDiagonal.push([i, decrementor, i]);
+                topDiagonal.push(new FormationPointModel(i, i, i));
+                bottomDiagonal.push(new FormationPointModel(i, decrementor, i));
 
                 decrementor--;
             }
@@ -166,8 +166,8 @@ export const buildDiagonals = (type = FORMATION_DIRECTIONS.NATURAL) => {
             break;
         case FORMATION_DIRECTIONS.DESC:
             for (let i = 3; i >= 0; i--) {
-                topDiagonal.push([i, incrementor, incrementor]);
-                bottomDiagonal.push([i, i, incrementor]);
+                topDiagonal.push(new FormationPointModel(i, incrementor, incrementor));
+                bottomDiagonal.push(new FormationPointModel(i, i, incrementor));
 
                 incrementor++;
             }
@@ -195,7 +195,7 @@ export const buildStacks = () => {
             const singleStackFormation = [];
 
             for (let level = 0; level < MAX_LENGTH; level++) {
-                const stack = [level, row, cell];
+                const stack = new FormationPointModel(level, row, cell);
                 singleStackFormation.push(stack);
             }
 
@@ -207,15 +207,15 @@ export const buildStacks = () => {
 };
 
 export const POSSIBLE_FORMATIONS = {
-    ROW_NATURAL: buildRows(FORMATION_DIRECTIONS.NATURAL),
-    ROW_ASC: buildRows(FORMATION_DIRECTIONS.ASC),
-    ROW_DESC: buildRows(FORMATION_DIRECTIONS.DESC),
-    COLUMN_NATURAL: buildColumns(FORMATION_DIRECTIONS.NATURAL),
-    COLUMN_ASC: buildColumns(FORMATION_DIRECTIONS.ASC),
-    COLUMN_DESC: buildColumns(FORMATION_DIRECTIONS.DESC),
-    DIAGONAL_NATURAL: buildDiagonals(FORMATION_DIRECTIONS.NATURAL),
-    DIAGONAL_ASC: buildDiagonals(FORMATION_DIRECTIONS.ASC),
-    DIAGONAL_DESC: buildDiagonals(FORMATION_DIRECTIONS.DESC),
+    // ROW_NATURAL: buildRows(FORMATION_DIRECTIONS.NATURAL),
+    // ROW_ASC: buildRows(FORMATION_DIRECTIONS.ASC),
+    // ROW_DESC: buildRows(FORMATION_DIRECTIONS.DESC),
+    // COLUMN_NATURAL: buildColumns(FORMATION_DIRECTIONS.NATURAL),
+    // COLUMN_ASC: buildColumns(FORMATION_DIRECTIONS.ASC),
+    // COLUMN_DESC: buildColumns(FORMATION_DIRECTIONS.DESC),
+    // DIAGONAL_NATURAL: buildDiagonals(FORMATION_DIRECTIONS.NATURAL),
+    // DIAGONAL_ASC: buildDiagonals(FORMATION_DIRECTIONS.ASC),
+    // DIAGONAL_DESC: buildDiagonals(FORMATION_DIRECTIONS.DESC),
     STACK_NATURAL: buildStacks(FORMATION_DIRECTIONS.NATURAL)
 };
 

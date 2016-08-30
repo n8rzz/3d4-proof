@@ -14,6 +14,17 @@ export default class FormationPointModel {
 
     /**
      * @for FormationPointModel
+     * @param comparePoint {FormationPointModel|array}
+     * @return {boolean}
+     */
+    isEqualToComparePoint(comparePoint) {
+        return comparePoint.level === this.level &&
+            comparePoint.row === this.row &&
+            comparePoint.column === this.column;
+    }
+
+    /**
+     * @for FormationPointModel
      * @method toArray
      * @return {array}
      */

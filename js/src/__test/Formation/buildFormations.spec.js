@@ -1,5 +1,7 @@
 import ava from 'ava';
 
+import FormationPointModel from '../../Formation/FormationPointModel';
+
 import {
     buildRows,
     buildColumns,
@@ -12,7 +14,7 @@ ava('.buildRows() returns a three dimensional array', t => {
 
     t.truthy(result.length === 16);
     t.truthy(result[0].length === 4);
-    t.truthy(result[0][0].length === 3);
+    t.truthy(result[0][0] instanceof FormationPointModel);
 });
 
 ava('.buildRows() with an `ASC` parameter returns a three dimensional array', t => {
@@ -20,7 +22,7 @@ ava('.buildRows() with an `ASC` parameter returns a three dimensional array', t 
 
     t.truthy(result.length === 4);
     t.truthy(result[0].length === 4);
-    t.truthy(result[0][0].length === 3);
+    t.truthy(result[0][0] instanceof FormationPointModel);
 });
 
 ava('.buildRows() with an `DESC` parameter returns a three dimensional array', t => {
@@ -28,7 +30,7 @@ ava('.buildRows() with an `DESC` parameter returns a three dimensional array', t
 
     t.truthy(result.length === 4);
     t.truthy(result[0].length === 4);
-    t.truthy(result[0][0].length === 3);
+    t.truthy(result[0][0] instanceof FormationPointModel);
 });
 
 ava('.buildColumns() returns a three dimensional array', t => {
@@ -36,7 +38,7 @@ ava('.buildColumns() returns a three dimensional array', t => {
 
     t.truthy(result.length === 16);
     t.truthy(result[0].length === 4);
-    t.truthy(result[0][0].length === 3);
+    t.truthy(result[0][0] instanceof FormationPointModel);
 });
 
 ava('.buildColumns() with an `ASC` parameter returns a three dimensional array', t => {
@@ -44,7 +46,7 @@ ava('.buildColumns() with an `ASC` parameter returns a three dimensional array',
 
     t.truthy(result.length === 4);
     t.truthy(result[0].length === 4);
-    t.truthy(result[0][0].length === 3);
+    t.truthy(result[0][0] instanceof FormationPointModel);
 });
 
 ava('.buildColumns() with an `DESC` parameter returns a three dimensional array', t => {
@@ -52,7 +54,7 @@ ava('.buildColumns() with an `DESC` parameter returns a three dimensional array'
 
     t.truthy(result.length === 4);
     t.truthy(result[0].length === 4);
-    t.truthy(result[0][0].length === 3);
+    t.truthy(result[0][0] instanceof FormationPointModel);
 });
 
 ava('.buildDiagonals() with an `NATURAL` parameter returns a three dimensional array', t => {
@@ -60,7 +62,7 @@ ava('.buildDiagonals() with an `NATURAL` parameter returns a three dimensional a
 
     t.truthy(result.length === 8);
     t.truthy(result[0].length === 4);
-    t.truthy(result[0][0].length === 3);
+    t.truthy(result[0][0] instanceof FormationPointModel);
 });
 
 ava('.buildDiagonals() with an `ASC` parameter returns a three dimensional array', t => {
@@ -68,7 +70,7 @@ ava('.buildDiagonals() with an `ASC` parameter returns a three dimensional array
 
     t.truthy(result.length === 2);
     t.truthy(result[0].length === 4);
-    t.truthy(result[0][0].length === 3);
+    t.truthy(result[0][0] instanceof FormationPointModel);
 });
 
 ava('.buildDiagonals() with an `DESC` parameter returns a three dimensional array', t => {
@@ -76,13 +78,12 @@ ava('.buildDiagonals() with an `DESC` parameter returns a three dimensional arra
 
     t.truthy(result.length === 2);
     t.truthy(result[0].length === 4);
-    t.truthy(result[0][0].length === 3);
+    t.truthy(result[0][0] instanceof FormationPointModel);
 });
 
 ava('.buildStacks() returns a three dimensional array', t => {
     const result = buildStacks();
-
     t.truthy(result.length === 16);
     t.truthy(result[0].length === 4);
-    t.truthy(result[0][0].length === 3);
+    t.truthy(result[0][0] instanceof FormationPointModel);
 });

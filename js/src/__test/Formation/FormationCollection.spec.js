@@ -1,28 +1,13 @@
 import ava from 'ava';
 
+import FormationPointModel from '../../Formation/FormationPointModel';
 import FormationCollection from '../../Formation/FormationCollection';
 
-const POINT = [0, 0, 0];
+const POINT = new FormationPointModel(0, 0, 0);
 
 ava('#FormationCollection instantiates without paramaters', t => {
     t.notThrows(() => new FormationCollection());
 });
-
-// ava('.buildFormationModelsFromPossibleFormations() sets an array of values for formations', t => {
-//     const collection = new FormationCollection();
-//     collection.formations = []
-//
-//     collection.buildFormationModelsFromPossibleFormations();
-//     t.truthy(Array.isArray(collection.formations));
-// });
-
-// ava('.createNewModelsFromFormations() ', t => {
-//     const collection = new FormationCollection();
-// });
-//
-// ava('.addFormationToCollection() ', t => {
-//     const collection = new FormationCollection();
-// });
 
 ava('.filterFormationsForPoint() returns all formations that contain a point', t => {
     const collection = new FormationCollection();
