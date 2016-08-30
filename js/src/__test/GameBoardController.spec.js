@@ -3,6 +3,7 @@ import ava from 'ava';
 import sinon from 'sinon';
 import _isArray from 'lodash/isArray';
 
+import FormationPointModel from '../Formation/FormationPointModel';
 import GameBoardController from '../GameBoardController';
 
 import {
@@ -17,7 +18,7 @@ const setupGameBoardTestCase = (pointsToPlace = [], player = null) => {
     const gameBoard = new GameBoardController();
 
     for (let i = 0; i < pointsToPlace.length; i++) {
-        const point = pointsToPlace[i];
+        const point = new FormationPointModel(pointsToPlace[i][0], pointsToPlace[i][1], pointsToPlace[i][2]);
         gameBoard.addPlayerAtPoint(player, point);
     }
 
@@ -50,13 +51,14 @@ ava('.addPlayerAtPoint() calls .isValidMove() before adding a new point', t => {
 //     const gameBoard = new GameBoardController();
 // });
 
-// ava('.findWinningFormation() returns early if there are less than 7 points played', t => {
-//     const gameBoard = setupGameBoardTestCase([0, 0, 0], PLAYER_ONE);
-//     const result = gameBoard.findWinningFormation(PLAYER_ONE, [0, 1, 3]);
-//
-//     t.truthy(result === null);
-// });
-//
+ava('.findWinningFormation() returns early if there are less than 7 points played', t => {
+    const gameBoard = setupGameBoardTestCase([[0, 0, 0], [0, 2, 0]], PLAYER_ONE);
+    const lastMove = new FormationPointModel(0, 1, 3);
+    const result = gameBoard.findWinningFormation(PLAYER_ONE, lastMove);
+
+    t.truthy(result === null);
+});
+
 // ava('.findWinningFormation() ', t => {
 //     const existingPlayerPoints = [
 //         [0, 0, 0],

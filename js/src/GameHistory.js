@@ -13,7 +13,7 @@ export default class GameHistory {
     /**
      * @method addPlayerMoveToHistory
      * @param player {number}
-     * @param point {array}
+     * @param point {FormationPointModel}
      */
     addPlayerMoveToHistory(player, point) {
         this.history[player].push(point);

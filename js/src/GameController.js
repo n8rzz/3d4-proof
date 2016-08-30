@@ -1,3 +1,4 @@
+import FormationPointModel from './Formation/FormationPointModel';
 import { PLAYER } from './constants';
 
 /**
@@ -105,7 +106,7 @@ export default class GameController {
         const level = parseInt($target.parentElement.dataset.levelId, 10);
         const row = parseInt($target.parentElement.dataset.rowId, 10);
         const column = parseInt($target.dataset.cellId, 10);
-        const playerMove = [level, row, column];
+        const playerMove = new FormationPointModel(level, row, column);
 
         return this.willExecutePlayerMove($target, playerMove);
     }

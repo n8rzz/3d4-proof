@@ -3,7 +3,7 @@
  */
 export default class FormationPointModel {
     constructor(level = -1, row = -1, column = -1) {
-        if (level === -1 || column === -1 || row === -1) {
+        if (level === -1 || row === -1 || column === -1) {
             throw new TypeError('Invalid parameters. Expected a positive integer');
         }
 

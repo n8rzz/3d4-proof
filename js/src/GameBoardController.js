@@ -1,10 +1,6 @@
 import GameHistory from './GameHistory';
+import FormationPointModel from './Formation/FormationPointModel';
 import FormationCollection from './Formation/FormationCollection';
-import {
-    LEVEL,
-    ROW,
-    COLUMN
-} from './constants';
 
 /**
  * Unique id for the controller. Should only be useful for testing, as there should only really be one
@@ -58,6 +54,20 @@ export default class GameBoardController {
 
     /**
      * @for GameBoardController
+     * @method findPlayerForPoint
+     * @param point {FormationPointModel}
+     * @return {number|null}
+     */
+    findPlayerForPoint(point) {
+        const level = point.level;
+        const row = point.row;
+        const column = point.column;
+
+        return this._gameBoard[level][row][column];
+    }
+
+    /**
+     * @for GameBoardController
      * @method isPointAvailable
      * @param point {array}
      * @return {boolean}
@@ -69,26 +79,26 @@ export default class GameBoardController {
     /**
      * @for GameBoardController
      * @method isValidMove
-     * @param point {array}
+     * @param point {FormationPointModel}
      * @return {boolean}
      */
     isValidMove(point) {
-        if (point[LEVEL] === 0) {
+        if (point.level === 0) {
             return this.isPointAvailable(point);
         }
 
-        const level = point[LEVEL] - 1;
-        const row = point[ROW];
-        const cell = point[COLUMN];
+        const level = point.level - 1;
+        const row = point.row;
+        const column = point.column;
 
-        return this.isPointAvailable(point) && this._gameBoard[level][row][cell] !== null;
+        return this.isPointAvailable(point) && this._gameBoard[level][row][column] !== null;
     }
 
     /**
      * @for GameBoardController
      * @method addPlayerAtPoint
      * @param player {number}
-     * @param point {array}
+     * @param point {FormationPointModel}
      * @return {boolean}
      */
     addPlayerAtPoint(player, point) {
@@ -96,9 +106,9 @@ export default class GameBoardController {
             return false;
         }
 
-        const level = point[LEVEL];
-        const row = point[ROW];
-        const column = point[COLUMN];
+        const level = point.level;
+        const row = point.row;
+        const column = point.column;
 
         this._gameBoard[level][row][column] = player;
 
@@ -144,26 +154,13 @@ export default class GameBoardController {
 
     /**
      * @for GameBoardController
-     * @method findPlayerForPoint
-     * @param point {array}
-     * @return {number|null}
-     */
-    findPlayerForPoint(point) {
-        const level = point[LEVEL];
-        const row = point[ROW];
-        const column = point[COLUMN];
-
-        return this._gameBoard[level][row][column];
-    }
-
-    /**
-     * @for GameBoardController
      * @method isWinningFormation
      * @param player {number}
      * @param formationPoints {array}
      * @return {boolean}
      */
     isWinningFormation(player, formationPoints) {
+        debugger;
         for (let i = 0; i < formationPoints.length; i++) {
             const point = formationPoints[i];
 
