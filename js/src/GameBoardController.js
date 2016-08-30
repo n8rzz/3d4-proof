@@ -160,7 +160,6 @@ export default class GameBoardController {
      * @return {boolean}
      */
     isWinningFormation(player, formationPoints) {
-        debugger;
         for (let i = 0; i < formationPoints.length; i++) {
             const point = formationPoints[i];
 

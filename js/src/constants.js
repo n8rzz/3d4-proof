@@ -10,7 +10,3 @@ export const PLAYER = {
     ONE: 0,
     TWO: 1
 };
-
-export const LEVEL = 0;
-export const ROW = 1;
-export const COLUMN = 2;
