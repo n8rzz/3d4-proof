@@ -1,233 +1,196 @@
-using System;
+using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
-class buildFormations
+public static class FormationBuilder
 {
-    private int MAX_LENGTH = 4;
+    static private int MAX_LENGTH = 4;
 
-
-    public List<int[]> buildRows(string type)
+    public static List<int[][]> buildRows(string variation)
     {
+        List<int[][]> allRows = new List<int[][]>();
 
-    }
+        switch (variation)
+        {
+            case "NATURAL":
+                for (var level = 0; level < MAX_LENGTH; level++) {
+                    for (var row = 0; row < MAX_LENGTH; row++) {
+                        int[][] singleRow = new int[MAX_LENGTH][];
 
-    // public List<int[]> buildColumns(string type)
-    // {
-    //
-    // }
-    //
-    // public List<int[]> buildDiagonals(string type)
-    // {
-    //
-    // }
-    //
-    // public List<int[]> buildStacks()
-    // {
-    //
-    // }
-}
+                        for (var cell = 0; cell < MAX_LENGTH; cell++) {
+                            int[] singleCellInRow = new int[] {level, row, cell};
 
+                            singleRow[row] = singleCellInRow;
+                        }
 
+                        allRows.Add(singleRow);
+                    }
+                }
 
+                break;
+            case "ASCENDING":
+                for (var row = 0; row < MAX_LENGTH; row++) {
+                    int[][] singleRow = new int[MAX_LENGTH][];
 
-// export const FORMATION_DIRECTIONS = {
-//     NATURAL: 'NATURAL',
-//     ASC: 'ASC',
-//     DESC: 'DESC'
-// };
+                    for (var levelAndCell = 0; levelAndCell < MAX_LENGTH; levelAndCell++) {
+                        int[] singleCellInRow = new int[] {levelAndCell, row, levelAndCell};
 
-/**
- * @function buildRows
- * @param type {String}
- * @return allRows {array}
- */
-export const buildRows = (type = FORMATION_DIRECTIONS.NATURAL) => {
-    const allRows = [];
-
-    switch (type) {
-        case FORMATION_DIRECTIONS.NATURAL:
-            for (let level = 0; level < MAX_LENGTH; level++) {
-                for (let row = 0; row < MAX_LENGTH; row++) {
-                    const singleRow = [];
-
-                    for (let cell = 0; cell < MAX_LENGTH; cell++) {
-                        singleRow.push([level, row, cell]);
+                        singleRow[row] = singleCellInRow;
                     }
 
-                    allRows.push(singleRow);
-                }
-            }
-
-            break;
-        case FORMATION_DIRECTIONS.ASC:
-            for (let row = 0; row < MAX_LENGTH; row++) {
-                const singleRow = [];
-
-                for (let levelAndCell = 0; levelAndCell < MAX_LENGTH; levelAndCell++) {
-                    singleRow.push([levelAndCell, row, levelAndCell]);
+                    allRows.Add(singleRow);
                 }
 
-                allRows.push(singleRow);
-            }
+                break;
+            case "DESCENDING":
+                for (var row = 0; row < MAX_LENGTH; row++) {
+                    var decrementor = 3;
+                    int[][] singleRow = new int[MAX_LENGTH][];
 
-            break;
-        case FORMATION_DIRECTIONS.DESC:
-            for (let row = 0; row < MAX_LENGTH; row++) {
-                let decrementor = 3;
-                const singleRow = [];
+                    for (var cell = 0; cell < MAX_LENGTH; cell++) {
+                        int[] singleCellInRow = new int[] {decrementor, row, cell};
 
-                for (let cell = 0; cell < MAX_LENGTH; cell++) {
-                    singleRow.push([decrementor, row, cell]);
-                    decrementor--;
-                }
-
-                allRows.push(singleRow);
-            }
-
-            break;
-        default:
-            break;
-    }
-
-    return allRows;
-};
-
-/**
- * @function buildColumns
- * @param type {String}
- * @return allColumns {array}
- */
-export const buildColumns = (type = FORMATION_DIRECTIONS.NATURAL) => {
-    const allColumns = [];
-
-    switch (type) {
-        case FORMATION_DIRECTIONS.NATURAL:
-            for (let level = 0; level < MAX_LENGTH; level++) {
-                for (let column = 0; column < MAX_LENGTH; column++) {
-                    const singleColumn = [];
-
-                    for (let row = 0; row < MAX_LENGTH; row++) {
-                        singleColumn.push([level, row, column]);
+                        singleRow[row] = singleCellInRow;
+                        decrementor--;
                     }
 
-                    allColumns.push(singleColumn);
-                }
-            }
-
-            break;
-        case FORMATION_DIRECTIONS.ASC:
-            for (let column = 0; column < MAX_LENGTH; column++) {
-                const singleColumn = [];
-
-                for (let levelAndRow = 0; levelAndRow < MAX_LENGTH; levelAndRow++) {
-                    singleColumn.push([levelAndRow, levelAndRow, column]);
+                    allRows.Add(singleRow);
                 }
 
-                allColumns.push(singleColumn);
-            }
-
-            break;
-        case FORMATION_DIRECTIONS.DESC:
-            for (let column = 0; column < MAX_LENGTH; column++) {
-                let decrementor = 3;
-                const singleColumn = [];
-
-                for (let row = 0; row < MAX_LENGTH; row++) {
-                    singleColumn.push([decrementor, column, row]);
-                    decrementor--;
-                }
-
-                allColumns.push(singleColumn);
-            }
-
-            break;
-        default:
-            break;
-    }
-
-    return allColumns;
-};
-
-/**
- * @function buildDiagonals
- * @param type {String}
- * @return diagonals {array}
- */
-export const buildDiagonals = (type = FORMATION_DIRECTIONS.NATURAL) => {
-    let incrementor = 0;
-    let decrementor = 3;
-    let topDiagonal = [];
-    let bottomDiagonal = [];
-    const diagonals = [];
-
-    switch (type) {
-        case FORMATION_DIRECTIONS.NATURAL:
-            for (let level = 0; level < MAX_LENGTH; level++) {
-                decrementor = 3;
-                topDiagonal = [];
-                bottomDiagonal = [];
-
-                for (let i = 0; i < MAX_LENGTH; i++) {
-                    topDiagonal.push([level, i, i]);
-                    bottomDiagonal.push([level, decrementor, i]);
-
-                    decrementor--;
-                }
-
-                diagonals.push(topDiagonal);
-                diagonals.push(bottomDiagonal);
-            }
-
-            break;
-        case FORMATION_DIRECTIONS.ASC:
-            for (let i = 0; i < MAX_LENGTH; i++) {
-                topDiagonal.push([i, i, i]);
-                bottomDiagonal.push([i, decrementor, i]);
-
-                decrementor--;
-            }
-
-            diagonals.push(topDiagonal);
-            diagonals.push(bottomDiagonal);
-
-            break;
-        case FORMATION_DIRECTIONS.DESC:
-            for (let i = 3; i >= 0; i--) {
-                topDiagonal.push([i, incrementor, incrementor]);
-                bottomDiagonal.push([i, i, incrementor]);
-
-                incrementor++;
-            }
-
-            diagonals.push(topDiagonal);
-            diagonals.push(bottomDiagonal);
-
-            break;
-        default:
-            break;
-    }
-
-    return diagonals;
-};
-
-/**
- * @function buildStacks
- * @return allStacks {array}
- */
-export const buildStacks = () => {
-    const allStacks = [];
-
-    for (let row = 0; row < MAX_LENGTH; row++) {
-        for (let cell = 0; cell < MAX_LENGTH; cell++) {
-            const singleStack = [];
-
-            for (let level = 0; level < MAX_LENGTH; level++) {
-                singleStack.push([level, row, cell]);
-            }
-
-            allStacks.push(singleStack);
+                break;
+            default:
+                break;
         }
+
+        return allRows;
     }
 
-    return allStacks;
-};
+    public static List<int[][]> buildColumns(string variation)
+    {
+        List<int[][]> allColumns = new List<int[][]>();
+
+        switch (variation)
+        {
+            case "NATURAL":
+                for (var level = 0; level < MAX_LENGTH; level++) {
+                    for (var column = 0; column < MAX_LENGTH; column++) {
+                        int[][] singleColumn = new int[MAX_LENGTH][];
+
+                        for (var row = 0; row < MAX_LENGTH; row++) {
+                            singleColumn[column] = new int[] {level, row, column};
+                        }
+
+                        allColumns.Add(singleColumn);
+                    }
+                }
+
+                break;
+            case "ASCENDING":
+                for (var column = 0; column < MAX_LENGTH; column++) {
+                    int[][] singleColumn = new int[MAX_LENGTH][];
+
+                    for (var levelAndRow = 0; levelAndRow < MAX_LENGTH; levelAndRow++) {
+                        singleColumn[column] = new int[] {levelAndRow, levelAndRow, column};
+                    }
+
+                    allColumns.Add(singleColumn);
+                }
+
+                break;
+            case "DESCENDING":
+                for (var column = 0; column < MAX_LENGTH; column++) {
+                    var decrementor = 3;
+                    int[][] singleColumn = new int[MAX_LENGTH][];
+
+                    for (var row = 0; row < MAX_LENGTH; row++) {
+                        singleColumn[column] = new int[] {decrementor, column, row};
+                        decrementor--;
+                    }
+
+                    allColumns.Add(singleColumn);
+                }
+
+                break;
+            default:
+                break;
+        }
+
+        return allColumns;
+    }
+
+    public static List<int[][]> buildDiagonals(string variation)
+    {
+        int incrementor = 0;
+        int decrementor = 3;
+        int[][] topDiagonal = new int[MAX_LENGTH][];
+        int[][] bottomDiagonal = new int[MAX_LENGTH][];
+        List<int[][]> diagonals = new List<int[][]>();;
+
+        switch (variation) {
+            case "NATURAL":
+                for (var level = 0; level < MAX_LENGTH; level++) {
+                    decrementor = 3;
+
+                    for (var i = 0; i < MAX_LENGTH; i++) {
+                        topDiagonal[i] = new int[] {level, i, i};
+                        bottomDiagonal[i] = new int[] {level, decrementor, i};
+
+                        decrementor--;
+                    }
+
+                    diagonals.Add(topDiagonal);
+                    diagonals.Add(bottomDiagonal);
+                }
+
+                break;
+            case "ASCENDING":
+                for (var i = 0; i < MAX_LENGTH; i++) {
+                    topDiagonal[i] = new int[] {i, i, i};
+                    bottomDiagonal[i] = new int[] {i, decrementor, i};
+
+                    decrementor--;
+                }
+
+                diagonals.Add(topDiagonal);
+                diagonals.Add(bottomDiagonal);
+
+                break;
+            case "DESCENDING":
+                for (var i = 3; i >= 0; i--) {
+                topDiagonal[i] = new int[] {i, incrementor, incrementor};
+                bottomDiagonal[i] = new int[] {i, i, incrementor};
+
+                    incrementor++;
+                }
+
+                diagonals.Add(topDiagonal);
+                diagonals.Add(bottomDiagonal);
+
+                break;
+            default:
+                break;
+        }
+
+        return diagonals;
+    }
+
+    public static List<int[][]> buildStacks()
+    {
+        List<int[][]> allStacks = new List<int[][]>();
+
+        for (var row = 0; row < MAX_LENGTH; row++) {
+            for (var cell = 0; cell < MAX_LENGTH; cell++) {
+                int[][] singleStack = new int[MAX_LENGTH][];
+
+                for (var level = 0; level < MAX_LENGTH; level++) {
+                    int[] stack = new int[] {level, row, cell};
+                    singleStack[cell] = stack;
+                }
+
+                allStacks.Add(singleStack);
+            }
+        }
+
+        return allStacks;
+    }
+}

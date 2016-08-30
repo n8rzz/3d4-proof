@@ -189,13 +189,14 @@ export const buildStacks = () => {
 
     for (let row = 0; row < MAX_LENGTH; row++) {
         for (let cell = 0; cell < MAX_LENGTH; cell++) {
-            const singleStack = [];
+            const singleStackFormation = [];
 
             for (let level = 0; level < MAX_LENGTH; level++) {
-                singleStack.push([level, row, cell]);
+                const stack = [level, row, cell];
+                singleStackFormation.push(stack);
             }
 
-            allStacks.push(singleStack);
+            allStacks.push(singleStackFormation);
         }
     }
 
