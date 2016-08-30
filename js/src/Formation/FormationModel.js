@@ -16,7 +16,7 @@ export default class FormationModel {
      * @param formationType {string}
      * @param points {array}
      */
-    constructor(formationType = '', points = 0) {
+    constructor(formationType = '', points = []) {
         if (formationType === '' || points.length === 0) {
             throw new TypeError('Invalid parameters passed to FormationModel');
         }

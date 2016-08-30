@@ -1,6 +1,8 @@
+import FormationModel from './FormationModel';
+
 const MAX_LENGTH = 4;
 
-export const FORMATION_DIRECTIONS = {
+const FORMATION_DIRECTIONS = {
     NATURAL: 'NATURAL',
     ASC: 'ASC',
     DESC: 'DESC'
@@ -201,4 +203,54 @@ export const buildStacks = () => {
     }
 
     return allStacks;
+};
+
+export const POSSIBLE_FORMATIONS = {
+    ROW_NATURAL: buildRows(FORMATION_DIRECTIONS.NATURAL),
+    ROW_ASC: buildRows(FORMATION_DIRECTIONS.ASC),
+    ROW_DESC: buildRows(FORMATION_DIRECTIONS.DESC),
+    COLUMN_NATURAL: buildColumns(FORMATION_DIRECTIONS.NATURAL),
+    COLUMN_ASC: buildColumns(FORMATION_DIRECTIONS.ASC),
+    COLUMN_DESC: buildColumns(FORMATION_DIRECTIONS.DESC),
+    DIAGONAL_NATURAL: buildDiagonals(FORMATION_DIRECTIONS.NATURAL),
+    DIAGONAL_ASC: buildDiagonals(FORMATION_DIRECTIONS.ASC),
+    DIAGONAL_DESC: buildDiagonals(FORMATION_DIRECTIONS.DESC),
+    STACK_NATURAL: buildStacks(FORMATION_DIRECTIONS.NATURAL)
+};
+
+
+/**
+ * Instantiate new FormationModels from a list of formations
+ *
+* @function createNewModelsFromFormations
+* @param formationName {string}
+* @param formationList {array}
+* @return formationModels {array}
+*/
+const createNewModelsFromFormations = (formationName, formationList) => {
+    const formationModels = [];
+
+    for (let i = 0; i < formationList.length; i++) {
+        const formationModel = new FormationModel(formationName, formationList[i]);
+
+        formationModels.push(formationModel);
+    }
+
+    return formationModels;
+};
+
+/**
+ * Assemble a list of FormationModels from the POSSIBLE_FORMATIONS list.
+ *
+ * @function buildFormationModelsFromPossibleFormations
+ * @return formationModelList {array}
+ */
+export const buildFormationModelsFromPossibleFormations = () => {
+    const formationModelList = [];
+
+    for (let formation in POSSIBLE_FORMATIONS) {
+        formationModelList.push(...createNewModelsFromFormations(formation, POSSIBLE_FORMATIONS[formation]));
+    }
+
+    return formationModelList;
 };

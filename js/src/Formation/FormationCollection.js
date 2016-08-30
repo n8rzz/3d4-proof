@@ -1,25 +1,6 @@
 import FormationModel from './FormationModel';
 
-import {
-    FORMATION_DIRECTIONS,
-    buildRows,
-    buildColumns,
-    buildDiagonals,
-    buildStacks
-} from './buildFormations';
-
-const POSSIBLE_FORMATIONS = {
-    ROW_NATURAL: buildRows(FORMATION_DIRECTIONS.NATURAL),
-    ROW_ASC: buildRows(FORMATION_DIRECTIONS.ASC),
-    ROW_DESC: buildRows(FORMATION_DIRECTIONS.DESC),
-    COLUMN_NATURAL: buildColumns(FORMATION_DIRECTIONS.NATURAL),
-    COLUMN_ASC: buildColumns(FORMATION_DIRECTIONS.ASC),
-    COLUMN_DESC: buildColumns(FORMATION_DIRECTIONS.DESC),
-    DIAGONAL_NATURAL: buildDiagonals(FORMATION_DIRECTIONS.NATURAL),
-    DIAGONAL_ASC: buildDiagonals(FORMATION_DIRECTIONS.ASC),
-    DIAGONAL_DESC: buildDiagonals(FORMATION_DIRECTIONS.DESC),
-    STACK_NATURAL: buildStacks(FORMATION_DIRECTIONS.NATURAL)
-};
+import { buildFormationModelsFromPossibleFormations } from './buildFormations';
 
 /**
  * @class FormationCollection
@@ -30,33 +11,7 @@ export default class FormationCollection {
      * @constructor
      */
     constructor() {
-        this.formations = [];
-
-        this.buildFormationModels();
-    }
-
-    /**
-     * @for FormationCollection
-     * @method buildFormationModels
-     */
-    buildFormationModels() {
-        for (let formation in POSSIBLE_FORMATIONS) {
-            this.createNewModelsFromFormations(formation, POSSIBLE_FORMATIONS[formation]);
-        }
-    }
-
-    /**
-     * @for FormationCollection
-     * @method createNewModelsFromFormations
-     * @param formationName {string}
-     * @param formationList {array}
-     */
-    createNewModelsFromFormations(formationName, formationList) {
-        for (let i = 0; i < formationList.length; i++) {
-            const formationModel = new FormationModel(formationName, formationList[i]);
-
-            this.addFormationToCollection(formationModel);
-        }
+        this.formations = buildFormationModelsFromPossibleFormations();
     }
 
     /**
