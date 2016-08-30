@@ -1,3 +1,4 @@
+import FormationPointModel from './FormationPointModel';
 import FormationModel from './FormationModel';
 
 const MAX_LENGTH = 4;
