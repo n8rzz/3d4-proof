@@ -1,5 +1,4 @@
 import FormationModel from './FormationModel';
-
 import { buildFormationModelsFromPossibleFormations } from './buildFormations';
 
 /**
