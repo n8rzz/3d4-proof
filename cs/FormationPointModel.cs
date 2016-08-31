@@ -1,30 +1,28 @@
-using System;
-using Sytem.Collections;
-
 public class FormationPointModel
 {
-    public int level;
-    public int row;
-    public int column;
+    int level;
+    int row;
+    int column;
 
     public FormationPointModel(int level, int row, int column)
     {
-        level = level;
-        row = row;
-        column = column;
+        this.level = level;
+        this.row = row;
+        this.column = column;
     }
 
-    public boolean isEqualToComparePoint(FormationpointModel comparePoint)
-    {
-        return comparePoint.level === level &&
-            comparePoint.row === row &&
-            comparePoint.column === column;
-    }
+    // FIXME: Move method to static utility class
+    // public bool isEqualToComparePoint(FormationPointModel comparePoint)
+    // {
+    //     return comparePoint.level == this.level &&
+    //         comparePoint.row == this.row &&
+    //         comparePoint.column == this.column;
+    // }
 
-    public int[] toArray()
-    {
-        const arr = new int[] {level, row, column};
+    // public int[] toArray()
+    // {
+    //     int[] arr = new int[] {level, row, column};
 
-        return arr;
-    }
+    //     return arr;
+    // }
 }
